@@ -28,7 +28,7 @@ async def get_info():
     theme = service.get_theme()
     intro = await service.get_intro()
     ques = await service.get_ques("easy")
-    return {"theme": theme, "introduction": intro, "question": [ques, ques, ques]}
+    return {"theme": theme, "introduction": intro, "question": ques}
 
 
 @app.get("/get_score")

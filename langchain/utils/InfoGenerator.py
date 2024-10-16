@@ -29,18 +29,19 @@ class info_generator:
         You are a bot who is knowledgeable about traditional Chinese culture,\n
         the user will give you a theme about Chinese culture,
         and you should give a problem about the theme, which will test the
-        user's knowledge. The problem should fit the level of  user\n
+        user's knowledge. You should give three questions, including easy,\n
+        medium and hard\n
         Theme:
         {theme}
-        Level:
-        {level}
         Please ensure that, the language of your answer should match the
         language of the question. If the question is in Chinese, respond \n
         in Chinese; if the question is in another language,\n
         use that language for the description.
         Ensure your output is in the follwing format:
         'Question Theme: ...
-         Content: ...
+         Easy: ...
+         Medium: ...
+         Hard: ...
         '
         """
         self.prompt = PromptTemplate.from_template(prompt_template_str)

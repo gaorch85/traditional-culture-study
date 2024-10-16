@@ -71,9 +71,14 @@ class challenge_generator:
         return self.theme
 
     def extract_ques(self, question):
-        start_index = question.find("Content: ")
-        content = question[start_index + len("Content: ") :].strip()
-        return content
+        easy_index = question.find("Easy: ")
+        medium_index = question.find("Medium: ")
+        hard_index = question.find("Hard: ")
+        easy = question[easy_index + len("Easy: ") : medium_index].strip()
+        medium = question[medium_index + len("Medium: ") : hard_index].strip()
+        hard = question[hard_index + len("Hard: ") :].strip()
+        ques = [easy, medium, hard]
+        return ques
 
     def extract_judge(self, judge):
         score_index = judge.find("Score:")
