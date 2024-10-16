@@ -31,8 +31,8 @@ class Service:
         theme = self.chllenge.get_theme()
         return theme
 
-    def get_intro(self):
-        intro = asyncio.run(self.chllenge.get_intro())
+    async def get_intro(self):
+        intro = await self.chllenge.get_intro()
         return intro
 
     async def get_ques(self, level):

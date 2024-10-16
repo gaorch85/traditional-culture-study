@@ -23,24 +23,12 @@ async def client(websocket: WebSocket):
     await service.get(websocket)
 
 
-@app.get("/get_theme")
-def get_theme():
+@app.get("/get_info")
+async def get_info():
     theme = service.get_theme()
-    return {"theme": theme}
-
-
-@app.get("/get_intro")
-def get_intro():
-    intro = service.get_intro()
-    return {"introduction": intro}
-
-
-@app.get("/get_ques")
-async def get_ques(request: Request):
-    data = await request.json()
-    level = data.get("level")
-    ques = await service.get_ques(level)
-    return {"question": ques}
+    intro = await service.get_intro()
+    ques = await service.get_ques("easy")
+    return {"theme": theme, "introduction": intro, "question": [ques, ques, ques]}
 
 
 @app.get("/get_score")
