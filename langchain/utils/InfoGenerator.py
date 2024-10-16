@@ -4,7 +4,7 @@ from utils.modelchoice import get_openai_chat_model, get_zhipu_chat_model
 
 class info_generator:
     def __init__(self):
-        self.chat_model = get_zhipu_chat_model()
+        self.chat_model = get_openai_chat_model()
 
     def intro_model(self):
         prompt_template_str: str = """
