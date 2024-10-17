@@ -122,12 +122,10 @@ public class DailyService
         return dateList.toArray(new String[0]); // 转换为数组
     }
 
-    public Result month()
+    public Integer[] getRes(Integer userId)
     {
-        Integer userId = JwtUtils.getId(request);
         String[] dates = getCurrentMonthDates();
         Integer[] res = new Integer[31];
-
         for(int i = 0; i < dates.length; i++)
         {
             List<Answer> answers = dailyMapper.selectAnswerByDate(userId, dates[i]);
@@ -154,8 +152,42 @@ public class DailyService
                 }
             }
         }
+        return res;
+    }
 
+    public Result month()
+    {
+        Integer userId = JwtUtils.getId(request);
+        Integer[] res = getRes(userId);
         return Result.ok(res);
+    }
+
+    public Result contin()
+    {
+        Integer userId = JwtUtils.getId(request);
+        Integer[] res = getRes(userId);
+        Integer cnt = 0;
+        Integer result = 0;
+        for(int i = 0; i < res.length; i++)
+        {
+            if(res[i] == null)
+            {
+                break;
+            }
+            if(res[i] > 0)
+            {
+                cnt++;
+            }
+            else
+            {
+                if(cnt > result)
+                {
+                    result = cnt;
+                }
+                cnt = 0;
+            }
+        }
+        return Result.ok(result);
     }
 }
 

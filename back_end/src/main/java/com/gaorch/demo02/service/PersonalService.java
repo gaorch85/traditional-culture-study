@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -124,4 +126,53 @@ public class PersonalService
         userMapper.updateNicknameById(nickname, userId);
         return Result.ok();
     }
+
+    public Result points(Integer pnts)
+    {
+        Integer userId = JwtUtils.getId(request);
+        Integer cur = userMapper.selectPoints(userId);
+        userMapper.updatePoints(cur + pnts, userId);
+        return Result.ok();
+    }
+
+    public double divideAndRound(int numerator, int denominator) {
+        if (denominator == 0) {
+            return 1;
+        }
+        BigDecimal result = new BigDecimal(numerator)
+                .divide(new BigDecimal(denominator), 4, RoundingMode.HALF_UP);
+        return result.doubleValue();
+    }
+
+    public Result percent()
+    {
+        Integer userId = JwtUtils.getId(request);
+        Integer sum = userMapper.selectCount();
+        Integer loser = userMapper.selectLoser(userId);
+        double res = divideAndRound(loser, sum - 1);
+        return Result.ok(res * 100);
+    }
+
+    public Result getPoints()
+    {
+        Integer userId = JwtUtils.getId(request);
+        Integer res = userMapper.selectPoints(userId);
+        return Result.ok(res);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

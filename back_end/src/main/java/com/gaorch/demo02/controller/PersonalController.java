@@ -58,4 +58,34 @@ public class PersonalController {
     {
         return personalService.updateNickname(nickname);
     }
+
+    @PostMapping("/points/{pnts}")
+    public Result points(@PathVariable Integer pnts)
+    {
+        return personalService.points(pnts);
+    }
+
+    @GetMapping("/percent")
+    public Result percent()
+    {
+        return personalService.percent();
+    }
+
+    @GetMapping("/points")
+    public Result getPoints()
+    {
+        return personalService.getPoints();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+

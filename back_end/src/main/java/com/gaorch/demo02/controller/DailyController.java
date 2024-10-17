@@ -54,6 +54,12 @@ public class DailyController
     {
         return dailyService.month();
     }
+
+    @GetMapping("/continue")
+    public Result contin()
+    {
+        return dailyService.contin();
+    }
 }
 
 
