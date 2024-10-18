@@ -1,6 +1,8 @@
 package com.gaorch.demo02.service;
 
 import com.gaorch.demo02.entity.User;
+import com.gaorch.demo02.mapper.DailyMapper;
+import com.gaorch.demo02.mapper.MessageMapper;
 import com.gaorch.demo02.mapper.UserMapper;
 import com.gaorch.demo02.utils.JwtUtils;
 import com.gaorch.demo02.utils.PasswordUtils;
@@ -21,12 +23,20 @@ import java.math.RoundingMode;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 public class PersonalService
 {
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private MessageMapper messageMapper;
+
+    @Autowired
+    private DailyMapper dailyMapper;
 
     @Autowired
     private HttpServletRequest request;     //用于解析请求头中的token
@@ -56,10 +66,25 @@ public class PersonalService
         return Result.ok();
     }
 
-    public Result delete()
-    {
+    public Result delete() {
         Integer id = JwtUtils.getId(request);
         userMapper.deleteById(id);
+        messageMapper.deleteByConversationId(id);
+        dailyMapper.deleteByUserId(id);
+
+        //linux
+        File directory = new File("/root/pic/");
+        //windows
+        //File directory = new File("D:\\pic\\");
+        String filePath = "";
+        File[] matchingFiles = directory.listFiles((dir, name) -> name.startsWith(id + "_"));
+        if (matchingFiles != null && matchingFiles.length > 0) {
+            filePath = matchingFiles[0].getAbsolutePath();
+        }
+        Path ffilePath = Paths.get(filePath);
+        java.io.File f = ffilePath.toFile();
+        f.delete();
+
         return Result.ok();
     }
 

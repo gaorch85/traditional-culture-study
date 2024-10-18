@@ -3,10 +3,7 @@ package com.gaorch.demo02.mapper;
 import com.gaorch.demo02.entity.Answer;
 import com.gaorch.demo02.entity.Question;
 import com.gaorch.demo02.entity.Theme;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -46,6 +43,9 @@ public interface DailyMapper
 
     @Select("select count(*) from answer where questionId = #{questionId}")
     public Integer selectCount(Integer questionId);
+
+    @Delete("delete from answer where userId = #{userId}")
+    public int deleteByUserId(Integer userId);
 }
 
 
