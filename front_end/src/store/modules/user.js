@@ -38,14 +38,14 @@ const actions = {
     commit('setToken', getToken())
 
     try {
-      const response = await api_getUsername();
-      const username = response.data.data;
+      var response = await api_getUsername();
+      var username = response.data.data;
       response = await api_getAvatar();
-      const avatarUrl = null;
+      var avatarUrl = null;
       if(response.data.code == 200)
       {
         console.log("enter the 200")
-        const avatarBlob = new Blob([avatarResponse.data.data], { type: 'image/jpeg' });
+        var avatarBlob = new Blob([avatarResponse.data.data], { type: 'image/jpeg' });
         avatarUrl = URL.createObjectURL(avatarBlob);
       }
       else
