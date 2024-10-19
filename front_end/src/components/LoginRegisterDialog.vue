@@ -8,7 +8,7 @@
   >
     <el-form :model="form" label-position="top" :rules="rules" ref="formRef">
       <el-form-item label="账号" prop="account">
-        <el-input v-model="form.account" prefix-icon="el-icon-user" />
+        <el-input v-model="form.username" prefix-icon="el-icon-user" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input v-model="form.password" type="password" prefix-icon="el-icon-lock" />
@@ -49,13 +49,13 @@ export default {
     const loading = ref(false)
 
     const form = reactive({
-      account: '',
+      username: '',
       password: '',
       confirmPassword: ''
     })
 
     const rules = {
-      account: [
+      username: [
         { required: true, message: '请输入账号', trigger: 'blur' },
         { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
       ],
@@ -88,7 +88,7 @@ export default {
     }
 
     const resetForm = () => {
-      form.account = ''
+      form.username = ''
       form.password = ''
       form.confirmPassword = ''
       if (formRef.value) {
