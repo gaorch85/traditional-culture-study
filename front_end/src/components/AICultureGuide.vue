@@ -41,8 +41,8 @@ import { ref, onMounted, watch } from 'vue'
 import { ChatDotRound } from '@element-plus/icons-vue'
 import ChatHistory from './ChatHistory.vue'
 import { ElMessage } from 'element-plus'
-import { api_listChatHistory, api_getResponse, api_getUserId } from '@/api/chat'
-
+import { api_listChatHistory, api_getResponse} from '@/api/chat'
+import { api_getUserId } from '@/api/user'
 const dialogVisible = ref(false)
 const inputString = ref('')
 const aiResponse = ref('')
@@ -82,7 +82,8 @@ const initWebsocket = () => {
 
   ws.value.onopen = () => {
     console.log('WebSocket connection opened')
-    sendWebsocket(userId)
+    sendWebsocket(userId.value)
+    console.log('user id is', userId.value)
   }
 
   ws.value.onmessage = (event) => {
@@ -119,9 +120,11 @@ onMounted(async () => {
   } else {
     ElMessage.error('网络异常')
   }
-  response = await api_getUserId()
-  if(response.data.code === 200) {
-    userId.value = response.data.data
+  const responseId = await api_getUserId()
+  if(responseId.data.code === 200) {
+    userId.value = responseId.data.data
+    console.log("response is", responseId.data.data)
+    console.log("assign userId", userId.value)
   } else {
     ElMessage.error('网络异常')
   }

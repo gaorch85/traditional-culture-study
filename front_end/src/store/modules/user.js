@@ -44,11 +44,13 @@ const actions = {
       const avatarUrl = null;
       if(response.data.code == 200)
       {
+        console.log("enter the 200")
         const avatarBlob = new Blob([avatarResponse.data.data], { type: 'image/jpeg' });
         avatarUrl = URL.createObjectURL(avatarBlob);
       }
       else
       {
+        console.log("did not enter the 200")
         avatarUrl = require('@/assets/avatar.png')
       }
   
