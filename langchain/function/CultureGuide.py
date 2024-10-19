@@ -33,7 +33,9 @@ class Retrieval:
         )
         print("created embedding")
         vectorstore = FAISS.load_local(
-            "vectorstore", embeddings, allow_dangerous_deserialization=True
+            "/home/vivy/class_hw/se/project/langchain/function/vectorstore",
+            embeddings,
+            allow_dangerous_deserialization=True,
         )
         print("finish loading vector_store")
         return vectorstore
