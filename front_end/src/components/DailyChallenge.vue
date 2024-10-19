@@ -97,15 +97,15 @@ onMounted(async () => {
         dailyChallenges.value[new Date(topic.date).getDate()] = topic.content
       })
     }
-    dailyChallenges.value = {
-        [today.getDate()]: '武术',
-        [today.getDate() - 1]: '瑜伽',
-        [today.getDate() - 2]: '跑步',
-        [today.getDate() - 3]: '游泳',
-        [today.getDate() - 4]: '举重',
-        [today.getDate() - 5]: '骑行',
-        [today.getDate() - 6]: '拳击',
-      }
+    // dailyChallenges.value = {
+    //     [today.getDate()]: '武术',
+    //     [today.getDate() - 1]: '瑜伽',
+    //     [today.getDate() - 2]: '跑步',
+    //     [today.getDate() - 3]: '游泳',
+    //     [today.getDate() - 4]: '举重',
+    //     [today.getDate() - 5]: '骑行',
+    //     [today.getDate() - 6]: '拳击',
+    //   }
 
     if (isLoggedIn.value) {
       const monthResponse = await api_getCurMonth()

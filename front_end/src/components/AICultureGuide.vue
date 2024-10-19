@@ -41,12 +41,13 @@ import { ref, onMounted, watch } from 'vue'
 import { ChatDotRound } from '@element-plus/icons-vue'
 import ChatHistory from './ChatHistory.vue'
 import { ElMessage } from 'element-plus'
-import { api_listChatHistory, api_getResponse } from '@/api/chat'
+import { api_listChatHistory, api_getResponse, api_getUserId } from '@/api/chat'
 
 const dialogVisible = ref(false)
 const inputString = ref('')
 const aiResponse = ref('')
 const chatHistory = ref([])
+const userId = ref('0')
 const isGPTthinking = ref(false)
 const websocketUrl = process.env.VUE_APP_WEBSOCKET_URL + '/get'
 const ws = ref(null)
@@ -81,7 +82,7 @@ const initWebsocket = () => {
 
   ws.value.onopen = () => {
     console.log('WebSocket connection opened')
-    sendWebsocket()
+    sendWebsocket(userId)
   }
 
   ws.value.onmessage = (event) => {
@@ -118,6 +119,13 @@ onMounted(async () => {
   } else {
     ElMessage.error('网络异常')
   }
+  response = await api_getUserId()
+  if(response.data.code === 200) {
+    userId.value = response.data.data
+  } else {
+    ElMessage.error('网络异常')
+  }
+  
 })
 
 // 监听对话框关闭，关闭WebSocket连接

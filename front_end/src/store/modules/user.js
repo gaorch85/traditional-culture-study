@@ -51,7 +51,7 @@ const actions = {
       {
         avatarUrl = require('@/assets/avatar.png')
       }
-
+  
       const userInfo = {
         username: username,
         avatar: avatarUrl

@@ -97,3 +97,12 @@ export function api_getAvatar() {
     responseType: 'blob',
   })
 }
+
+
+// 获取用户 id
+export function api_getUserId() {
+  return request({
+    url: `/getUserId`,
+    method: 'get'
+  })
+}
