@@ -38,26 +38,31 @@ const actions = {
     commit('setToken', getToken())
 
     try {
-      // TODO: 实现真实的获取用户信息 API 调用
-      // const response = await api_getUsername();
-      // const username = response.data.data;
-      // response = await api_getAvatar();
-      // const avatarBlob = new Blob([avatarResponse.data], { type: 'image/jpeg' });
-      // const avatarUrl = URL.createObjectURL(avatarBlob);
-
-      // const userInfo = {
-      //   username: username,
-      //   avatar: avatarUrl
-      // }
-
-
-      // 模拟获取用户信息
-      const userInfo = {
-        username: 'mockUser_' + Date.now(),
-        avatar: require('@/assets/avatar.png')
+      const response = await api_getUsername();
+      const username = response.data.data;
+      response = await api_getAvatar();
+      const avatarUrl = null;
+      if(response.data.code == 200)
+      {
+        const avatarBlob = new Blob([avatarResponse.data.data], { type: 'image/jpeg' });
+        avatarUrl = URL.createObjectURL(avatarBlob);
+      }
+      else
+      {
+        avatarUrl = require('@/assets/avatar.png')
       }
 
-      
+      const userInfo = {
+        username: username,
+        avatar: avatarUrl
+      }
+
+      // // 模拟获取用户信息
+      // const userInfo = {
+      //   username: 'mockUser_' + Date.now(),
+      //   avatar: require('@/assets/avatar.png')
+      // }
+
       commit('setUserInfo', userInfo)
     } catch (error) {
       console.error('获取用户信息失败', error)

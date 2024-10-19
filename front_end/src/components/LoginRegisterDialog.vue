@@ -109,30 +109,30 @@ export default {
         await formRef.value.validate();
         loading.value = true;
         
-        // const response = isLogin.value ? await api_login(form) : await api_signup(form);
-        // if(response.data.code == 200) {
-        //   const token = response.data.data;
-        //   setToken(token);
-        //   ElMessage.success(isLogin.value ? '登录成功' : '注册成功');
-        //   await store.dispatch('user/getUserInfo');
-        //   emit('login-success')
-        //   handleClose()
-        // }
-        // else {
-        //   ElMessage.error(isLogin.value ? '账号或密码错误' : '该账号已存在');
-        // }
+        const response = isLogin.value ? await api_login(form) : await api_signup(form);
+        if(response.data.code == 200) {
+          const token = response.data.data;
+          setToken(token);
+          ElMessage.success(isLogin.value ? '登录成功' : '注册成功');
+          await store.dispatch('user/getUserInfo');
+          emit('login-success')
+          handleClose()
+        }
+        else {
+          ElMessage.error(isLogin.value ? '账号或密码错误' : '该账号已存在');
+        }
 
 
-        // 模拟获取 token 成功
-        const token = 'mock_token_' + Date.now()
-        setToken(token)
+        // // 模拟获取 token 成功
+        // const token = 'mock_token_' + Date.now()
+        // setToken(token)
 
-        // 不直接设置用户信息，而是触发获取用户信息的 action
-        await store.dispatch('user/getUserInfo')
+        // // 不直接设置用户信息，而是触发获取用户信息的 action
+        // await store.dispatch('user/getUserInfo')
         
-        ElMessage.success(isLogin.value ? '登录成功' : '注册成功')
-        emit('login-success')
-        handleClose()
+        // ElMessage.success(isLogin.value ? '登录成功' : '注册成功')
+        // emit('login-success')
+        // handleClose()
 
         
       } catch (error) {

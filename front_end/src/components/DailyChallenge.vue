@@ -90,13 +90,13 @@ function formatDate(date) {
 
 onMounted(async () => {
   try {
-    // const topicsResponse = await api_listTopics()
-    // if (topicsResponse.data.code === 200) {
-    //   const topicsData = topicsResponse.data.data
-    //   topicsData.forEach(topic => {
-    //     dailyChallenges.value[new Date(topic.date).getDate()] = topic.content
-    //   })
-    // }
+    const topicsResponse = await api_listTopics()
+    if (topicsResponse.data.code === 200) {
+      const topicsData = topicsResponse.data.data
+      topicsData.forEach(topic => {
+        dailyChallenges.value[new Date(topic.date).getDate()] = topic.content
+      })
+    }
     dailyChallenges.value = {
         [today.getDate()]: '武术',
         [today.getDate() - 1]: '瑜伽',
