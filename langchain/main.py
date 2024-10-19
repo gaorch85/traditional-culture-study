@@ -23,7 +23,7 @@ async def client(websocket: WebSocket):
     await service.get(websocket)
 
 
-@app.get("/get_info")
+@app.post("/get_info")
 async def get_info():
     theme = service.get_theme()
     intro = await service.get_intro()
@@ -31,7 +31,7 @@ async def get_info():
     return {"theme": theme, "introduction": intro, "question": ques}
 
 
-@app.get("/get_score")
+@app.post("/get_score")
 async def get_score(request: Request):
     data = await request.json()
     ques = data.get("qusetion")
