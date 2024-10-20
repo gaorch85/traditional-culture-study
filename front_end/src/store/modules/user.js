@@ -41,8 +41,8 @@ const actions = {
       var response = await api_getUsername();
       var username = response.data.data;
       response = await api_getAvatar();
-      var avatarBlob = new Blob([avatarResponse.data.data], { type: 'image/png' });
-      avatarUrl = URL.createObjectURL(avatarBlob);
+      var avatarBlob = new Blob([response.data], { type: 'image/png' });
+      var avatarUrl = URL.createObjectURL(avatarBlob);
       // if(response.data.code == 200)
       // {
       //   console.log("enter the 200")
