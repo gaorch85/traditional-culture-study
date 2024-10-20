@@ -10,14 +10,11 @@ import java.util.List;
 @Mapper
 public interface DailyMapper
 {
-    @Select("select * from theme where date = CURDATE()")
-    public Theme selectTheme();
+    @Select("select * from theme where date = #{date}")
+    public Theme selectTheme(String date);
 
     @Select("select * from theme")
     public List<Theme> selectAllTheme();
-
-    @Select("select * from question where date = CURDATE()")
-    public List<Question> selectQuestion();
 
     @Select("select * from question where date = #{date}")
     public List<Question> selectQuestionByDate(String date);

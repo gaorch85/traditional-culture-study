@@ -48,6 +48,12 @@ public class PersonalService
         return Result.ok(user);
     }
 
+    public Result getUserId()
+    {
+        Integer id = JwtUtils.getId(request);
+        return Result.ok(id);
+    }
+
     public Result changePassword(User user)
     {
         String username = JwtUtils.getUserName(request);
@@ -73,7 +79,7 @@ public class PersonalService
         dailyMapper.deleteByUserId(id);
 
         //linux
-        File directory = new File("/root/pic/");
+        File directory = new File("/home/pic/");
         //windows
         //File directory = new File("D:\\pic\\");
         String filePath = "";
@@ -95,7 +101,7 @@ public class PersonalService
         //java.io.File directory = new java.io.File("D:\\pic\\");
 
         //linux
-        java.io.File directory = new java.io.File("/root/pic/");
+        java.io.File directory = new java.io.File("/home/pic/");
 
         if (!directory.exists()) {
             directory.mkdirs();
@@ -114,12 +120,11 @@ public class PersonalService
         this.resourceLoader = resourceLoader;
     }
 
-    public ResponseEntity<Resource> getPic()
-    {
+    public Result getPic() throws UnsupportedEncodingException {
         String userId = JwtUtils.getId(request).toString();
 
         //linux
-        File directory = new File("/root/pic/");
+        File directory = new File("/home/pic/");
 
         //windows
         //File directory = new File("D:\\pic\\");
@@ -128,20 +133,14 @@ public class PersonalService
         File[] matchingFiles = directory.listFiles((dir, name) -> name.startsWith(userId + "_"));
 
         if (matchingFiles != null && matchingFiles.length > 0) {
-            try {
-                // 解码文件名，处理特殊字符
-                String filePath = matchingFiles[0].getAbsolutePath();
-                String decodedPath = URLDecoder.decode(filePath, "UTF-8");
+            // 解码文件名，处理特殊字符
+            String filePath = matchingFiles[0].getAbsolutePath();
+            String decodedPath = URLDecoder.decode(filePath, "UTF-8");
 
-                Resource resource = resourceLoader.getResource("file:" + decodedPath);
-                return ResponseEntity.ok(resource);
-            } catch (UnsupportedEncodingException e) {
-                return ResponseEntity.internalServerError().build();
-            } catch (Exception e) {
-                return ResponseEntity.internalServerError().build(); // 处理其他异常
-            }
+            Resource resource = resourceLoader.getResource("file:" + decodedPath);
+            return Result.ok(ResponseEntity.ok(resource));
         } else {
-            return ResponseEntity.notFound().build(); // 找不到头像文件
+            return Result.error(); // 找不到头像文件
         }
     }
 
@@ -150,6 +149,13 @@ public class PersonalService
         Integer userId = JwtUtils.getId(request);
         userMapper.updateNicknameById(nickname, userId);
         return Result.ok();
+    }
+
+    public Result getNickname()
+    {
+        Integer userId = JwtUtils.getId(request);
+        String nickname = userMapper.selectNickname(userId);
+        return Result.ok(nickname);
     }
 
     public Result points(Integer pnts)

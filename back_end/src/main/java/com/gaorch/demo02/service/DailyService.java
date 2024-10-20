@@ -8,7 +8,9 @@ import com.gaorch.demo02.utils.HttpUtils;
 import com.gaorch.demo02.utils.JwtUtils;
 import com.gaorch.demo02.utils.Result;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,10 +35,10 @@ public class DailyService
         private List<Question> questions;
     };
 
-    public Result get()
+    public Result get(String date)
     {
-        Theme theme = dailyMapper.selectTheme();
-        List<Question> questions = dailyMapper.selectQuestion();
+        Theme theme = dailyMapper.selectTheme(date);
+        List<Question> questions = dailyMapper.selectQuestionByDate(date);
 
         Dataa dataa = new Dataa();
         dataa.setQuestions(questions);
@@ -49,12 +51,6 @@ public class DailyService
     {
         List<Theme> themes = dailyMapper.selectAllTheme();
         return Result.ok(themes);
-    }
-
-    public Result getQuestion(String date)
-    {
-        List<Question> questions = dailyMapper.selectQuestionByDate(date);
-        return Result.ok(questions);
     }
 
     public Result getAnswer(Integer questionId)
@@ -73,11 +69,16 @@ public class DailyService
     }
 
     @Data
-    private class Daa
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private static class Daa
     {
         private Integer score;
         private String reason;
     }
+
+    @Autowired
+    private HttpUtils httpUtils;
 
     public Result answer(Answer answer)
     {
@@ -90,7 +91,7 @@ public class DailyService
         daata.setQuestion(question.getContent());
         daata.setAnswer(answer.getContent());
 
-        Daa daa = HttpUtils.PostRequest("localhost:80/get_score", daata, Daa.class);
+        Daa daa = httpUtils.PostRequest("http://localhost:8080/get_score", daata, Daa.class);
         answer.setScore(daa.getScore());
         answer.setReason(daa.getReason());
         dailyMapper.insertAnswer(answer);

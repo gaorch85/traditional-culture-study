@@ -13,22 +13,16 @@ public class DailyController
     @Autowired
     private DailyService dailyService;
 
-    @GetMapping("")
-    public Result get()
+    @GetMapping("/{date}")
+    public Result get(@PathVariable String date)
     {
-        return dailyService.get();
+        return dailyService.get(date);
     }
 
     @GetMapping("/list")
     public Result list()
     {
         return dailyService.list();
-    }
-
-    @GetMapping("/question/{date}")
-    public Result getQuestion(@PathVariable String date)
-    {
-        return dailyService.getQuestion(date);
     }
 
     @GetMapping("/answer/{questionId}")

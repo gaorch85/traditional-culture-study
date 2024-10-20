@@ -38,9 +38,10 @@ public class MessageService
     @Autowired
     private HttpServletRequest request;
 
-    public Result list(Integer conversationId)
+    public Result list()
     {
         // 从Redis缓存中获取消息
+        Integer conversationId = JwtUtils.getId(request);
         List<Object> messages = redisTemplate.opsForList().range(conversationId.toString(), 0, -1);
         if (messages != null && !messages.isEmpty()) {
             System.out.println("调用redis");
@@ -83,6 +84,7 @@ public class MessageService
 
             // 发送前置消息
             PreData preData = new PreData();
+            preData.setBackIntro("");
             preData.setLastMessages(messages);
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -91,6 +93,7 @@ public class MessageService
         }
 
         message.setIsPerson(1);
+        message.setConversationId(conversationId);
         messageMapper.insert(message);
 
         String key = conversationId.toString();

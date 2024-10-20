@@ -23,6 +23,9 @@ public interface UserMapper extends BaseMapper<User> {
     @Update("update user set nickname = #{nickname} where id = #{id}")
     public int updateNicknameById(String nickname, Integer id);
 
+    @Select("select nickname from user where id = #{id}")
+    public String selectNickname(Integer id);
+
     @Update("update user set points = #{points} where id = #{id}")
     public int updatePoints(Integer points, Integer id);
 

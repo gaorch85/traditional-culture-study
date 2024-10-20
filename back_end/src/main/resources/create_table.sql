@@ -44,3 +44,18 @@ CREATE TABLE `user` (
                         PRIMARY KEY (`id`),
                         UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TRIGGER before_insert_answer
+    BEFORE INSERT ON answer
+    FOR EACH ROW
+    SET NEW.date = CURDATE();
+
+CREATE TRIGGER before_insert_theme
+    BEFORE INSERT ON theme
+    FOR EACH ROW
+    SET NEW.date = CURDATE();
+
+CREATE TRIGGER before_insert_question
+    BEFORE INSERT ON question
+    FOR EACH ROW
+    SET NEW.date = CURDATE();

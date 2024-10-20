@@ -34,7 +34,9 @@ public class LoginService
         user.setId(0);
         userMapper.insert(user);
 
-        return Result.ok();
+        String token = JwtUtils.generateToken(user.getUsername());
+        return Result.ok(token);
+
     }
 
 

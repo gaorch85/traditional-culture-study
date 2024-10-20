@@ -19,10 +19,10 @@ public class MessageController
     @Autowired
     private MessageService messageService;
 
-    @GetMapping("/list/{conversationId}")
-    public Result list(@PathVariable Integer conversationId)
+    @GetMapping("/list")
+    public Result list()
     {
-        return messageService.list(conversationId);
+        return messageService.list();
     }
 
 

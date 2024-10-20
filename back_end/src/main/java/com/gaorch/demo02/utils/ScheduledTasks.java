@@ -14,8 +14,11 @@ public class ScheduledTasks {
     @Autowired
     private DailyMapper dailyMapper;
 
+    @Autowired
+    private HttpUtils httpUtils;
+
     @Data
-    private class Da
+    private static class Da
     {
         private String theme;
         private String introduction;
@@ -25,7 +28,7 @@ public class ScheduledTasks {
     @Scheduled(cron = "0 1 0 * * ?") // 每天零点一分执行
     public void executeTask() {
         // 这里放置您需要执行的代码
-        Da da = HttpUtils.PostRequest("localhost:80/get_info", null, Da.class);
+        Da da = httpUtils.PostRequest("http://localhost:8080/get_info", null, Da.class);
         dailyMapper.insertTheme(da.getTheme(), da.getIntroduction());
         dailyMapper.insertQuestion(1, da.getQuestion().get(0));
         dailyMapper.insertQuestion(2, da.getQuestion().get(1));

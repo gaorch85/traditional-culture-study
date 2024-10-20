@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 @RestController
 public class PersonalController {
@@ -24,6 +25,12 @@ public class PersonalController {
     @GetMapping("/getInfo")
     public Result getInfo() {
         return personalService.getInfo();
+    }
+
+    @GetMapping("/getUserId")
+    public Result getUserId()
+    {
+        return personalService.getUserId();
     }
 
     @PutMapping("/changePassword")
@@ -48,8 +55,7 @@ public class PersonalController {
     }
 
     @GetMapping("/pic")
-    public ResponseEntity<Resource> getPic()
-    {
+    public Result getPic() throws UnsupportedEncodingException {
         return personalService.getPic();
     }
 
@@ -57,6 +63,12 @@ public class PersonalController {
     public Result updateNickname(String nickname)
     {
         return personalService.updateNickname(nickname);
+    }
+
+    @GetMapping("/nickname")
+    public Result getNickname()
+    {
+        return personalService.getNickname();
     }
 
     @PostMapping("/points/{pnts}")

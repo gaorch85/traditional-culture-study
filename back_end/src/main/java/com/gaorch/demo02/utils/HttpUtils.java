@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 public class HttpUtils {
 
     @Autowired
-    private static RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     /**
      * 发送 POST 请求，携带 JSON 格式的请求体，并处理返回的 JSON 格式响应
@@ -24,7 +24,7 @@ public class HttpUtils {
      * @param <R>         返回体类型
      * @return 返回反序列化后的响应对象
      */
-    public static <T, R> R PostRequest(String url, T requestBody, Class<R> responseType) {
+    public <T, R> R PostRequest(String url, T requestBody, Class<R> responseType) {
         // 创建请求头，指定内容类型为 JSON
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
