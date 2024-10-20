@@ -143,6 +143,8 @@ import { ref, computed, reactive, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { api_getCurAnswer, api_getAnswerCount, api_getDailyInfo, api_listAnswers } from '@/api/challedge';
+import { api_increasePoint } from '@/api/user'
+import { ElMessage } from 'element-plus';
 
 const store = useStore();
 const route = useRoute();
@@ -213,9 +215,18 @@ const success_message_color = computed(() => {
 });
 
 const suggestion_before = computed(() => {
-  if (score.value >= 80) return "优秀回答！恭喜你！ 🎉";
-  else if (score.value >= 60) return "答题通过！恭喜你！ 🎉";
-  else return "未通过😣，再试一次吧";
+  if (score.value >= 80) 
+  {
+    return "优秀回答！恭喜你！ 🎉";
+  } 
+  else if (score.value >= 60) 
+  {
+    return "答题通过！恭喜你！ 🎉";
+  }
+  else 
+  {
+    return "未通过😣，再试一次吧";
+  } 
 });
 
 const try_simple = computed(() => "尝试次数：" + try_times_simple.value);
@@ -258,6 +269,13 @@ const onsubmit = async (level) => {
     const response = await api_getCurAnswer({ questionId, content: form.answer });
     if (response.data.code === 200) {
       score.value = response.data.data.score;
+      if(score.value >= 80) {
+        const increasePointResponse = await api_increasePoint(10);
+        (increasePointResponse.data.code == 200) ? ElMessage.success('积分+10！') : ElMessage.error('积分异常!');
+      } else if(score.value >= 60) {
+        const increasePointResponse = await api_increasePoint(5);
+        (increasePointResponse.data.code == 200) ? ElMessage.success('积分+5！') : ElMessage.error('积分异常!');
+      } 
       suggestion.value = response.data.data.reason;
       successVisible.value = true;
       
