@@ -177,37 +177,49 @@ onMounted(async () => {
     padding: 20px;
     background-color: #f5f5f5;
   }
-  
+
   .sidebar {
     text-align: center;
     width: 250px;
     padding: 20px;
-    background:floralwhite;
+    background: floralwhite;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    height:1038px;
+    height: 1038px;
   }
-  
+
+  .avatar-container {
+    width: 178px;
+    height: 178px;
+    margin: 0 auto;
+    position: relative;
+  }
+
   .avatar-uploader {
     border: 1px dashed #d9d9d9;
     border-radius: 50%;
     cursor: pointer;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-    width: 178px;
-    height: 178px;
   }
+
   .avatar-uploader:hover {
     border-color: #409eff;
   }
+
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 178px;
-    height: 178px;
+    width: 100%;
+    height: 100%;
     line-height: 178px;
     text-align: center;
   }
+
   .avatar {
     width: 100%;
     height: 100%;
@@ -215,26 +227,26 @@ onMounted(async () => {
     object-fit: cover;
     border-radius: 50%;
   }
-  
+
   .user-info {
     text-align: center;
     margin-top: 20px;
   }
-  
-  .user-info button{
-    background:floralwhite;
+
+  .user-info button {
+    background: floralwhite;
   }
-  
+
   .user-info h2 {
     margin: 0;
     font-size: 18px;
   }
-  
+
   .user-info p {
     font-size: 14px;
     color: #666;
   }
-  
+
   button {
     margin-top: 5px;
     cursor: pointer;
@@ -243,7 +255,7 @@ onMounted(async () => {
     border-radius: 5px;
     transition: background-color 0.3s;
   }
-  
+
   .content {
     flex: 1;
     margin-left: 20px;
