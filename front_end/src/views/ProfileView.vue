@@ -117,7 +117,7 @@ const updateUsername = async () => {
 }
 
 const handleAvatarChange = async (file) => {
-  if (!beforeAvatarUpload(file)) {
+  if (!beforeAvatarUpload(file.raw)) {
     return
   }
 
@@ -135,12 +135,13 @@ const handleAvatarChange = async (file) => {
   }
 }
 
-const beforeAvatarUpload = (file) => {
-  const isJPG = file.type === 'image/jpeg'
+const beforeAvatarUpload = (file) => { 
+  console.log(file.type) 
+  const isPNG = file.type === 'image/png'
   const isLt2M = file.size / 1024 / 1024 < 2
 
-  if (!isJPG) {
-    ElMessage.error('上传头像图片只能是 JPG 格式!')
+  if (!isPNG) {
+    ElMessage.error('上传头像图片只能是 PNG 格式!')
     return false
   }
   if (!isLt2M) {

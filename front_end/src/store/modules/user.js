@@ -45,7 +45,7 @@ const actions = {
       if(response.data.code == 200)
       {
         console.log("enter the 200")
-        var avatarBlob = new Blob([avatarResponse.data.data], { type: 'image/jpeg' });
+        var avatarBlob = new Blob([avatarResponse.data.data], { type: 'image/png' });
         avatarUrl = URL.createObjectURL(avatarBlob);
       }
       else
