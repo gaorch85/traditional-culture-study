@@ -1,5 +1,5 @@
 <template>
-  <div class="challedge">
+  <div class="challenge">
     <div class="date">
       <div class="year">{{ currentYear }}/{{ currentMonth }}</div>
       <div class="day">{{ currentDate }}</div>
@@ -16,10 +16,10 @@
         <el-step title="困难" :description="try_hard" />
       </el-steps>
     </div>
-    <div class="challedge_button">
-      <el-button class="cb" style="margin-top: 12px" @click="onCilckSimple">挑战简单</el-button>
-      <el-button class="cb" style="margin-top: 12px" @click="onCilckMid" :disabled="isMId">挑战中等</el-button>
-      <el-button style="margin-top: 12px" @click="onCilckHard" :disabled="isHard">挑战困难</el-button>
+    <div class="challenge_button">
+      <el-button class="cb" style="margin-top: 12px" @click="onClickSimple">挑战简单</el-button>
+      <el-button class="cb" style="margin-top: 12px" @click="onClickMid" :disabled="isMid">挑战中等</el-button>
+      <el-button style="margin-top: 12px" @click="onClickHard" :disabled="isHard">挑战困难</el-button>
     </div>
     <div class="question_area">
       <el-dialog v-model="dialogFormVisible_simple" title="每日问答--简单" width="500">
@@ -70,13 +70,13 @@
       </el-dialog>
     </div>
 
-    <div v-if="successVisible" class="success-message" :style="{ '--success_message_color': success_message_color }">
-      <div class="success-message_close"><el-icon @click="successVisible = false;">
-          <CloseBold />
-        </el-icon></div>
-      {{ suggestion_before }}
-      <div><span>你的分数：</span><span>{{ score }}</span></div>
-      <div>{{ suggestion }}</div>
+    <div v-if="successVisible" class="success-message" :class="scoreClass">
+      <div class="success-message_close"><el-icon @click="successVisible = false;"><CloseBold /></el-icon></div>
+      <div class="success-message_content">
+        <div class="success-message_header">{{ suggestion_before }}</div>
+        <div class="success-message_score">你的分数：<span>{{ score }}</span></div>
+        <div class="success-message_suggestion">{{ suggestion }}</div>
+      </div>
     </div>
 
     <div class="history">
@@ -84,9 +84,7 @@
         <el-table-column prop="time" label="尝试时间" width="180">
           <template #default="scope">
             <div style="display: flex; align-items: center">
-              <el-icon>
-                <timer />
-              </el-icon>
+              <el-icon><timer /></el-icon>
               <span style="margin-left: 10px">{{ scope.row.time }}</span>
             </div>
           </template>
@@ -110,7 +108,7 @@
 
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button size="small" @click="onCilckHistory(scope.row)">
+            <el-button size="small" @click="onClickHistory(scope.row)">
               查看
             </el-button>
           </template>
@@ -163,7 +161,7 @@ const try_times_simple = ref(0);
 const try_times_mid = ref(0);
 const try_times_hard = ref(0);
 
-const isMId = computed(() => active.value < 1);
+const isMid = computed(() => active.value < 1);
 const isHard = computed(() => active.value < 2);
 
 const today_topic = ref("");
@@ -208,42 +206,33 @@ const history_level = ref('');
 const history_answer = ref('');
 const history_suggestion = ref('');
 
-const success_message_color = computed(() => {
-  if (score.value >= 80) return "#4CAF50";
-  else if (score.value >= 60) return "#409EFF";
-  else return "#909399";
+const scoreClass = computed(() => {
+  if (score.value >= 80) return "success-message--excellent";
+  else if (score.value >= 60) return "success-message--pass";
+  else return "success-message--fail";
 });
 
 const suggestion_before = computed(() => {
-  if (score.value >= 80) 
-  {
-    return "优秀回答！恭喜你！ 🎉";
-  } 
-  else if (score.value >= 60) 
-  {
-    return "答题通过！恭喜你！ 🎉";
-  }
-  else 
-  {
-    return "未通过😣，再试一次吧";
-  } 
+  if (score.value >= 80) return "优秀回答！恭喜你！ 🎉";
+  else if (score.value >= 60) return "答题通过！恭喜你！ 🎉";
+  else return "未通过😣，再试一次吧";
 });
 
 const try_simple = computed(() => "尝试次数：" + try_times_simple.value);
 const try_mid = computed(() => "尝试次数：" + try_times_mid.value);
 const try_hard = computed(() => "尝试次数：" + try_times_hard.value);
 
-const onCilckSimple = () => {
+const onClickSimple = () => {
   dialogFormVisible_simple.value = true;
   current_select.value = 1;
 };
 
-const onCilckMid = () => {
+const onClickMid = () => {
   dialogFormVisible_mid.value = true;
   current_select.value = 2;
 };
 
-const onCilckHard = () => {
+const onClickHard = () => {
   dialogFormVisible_hard.value = true;
   current_select.value = 3;
 };
@@ -284,6 +273,11 @@ const onsubmit = async (level) => {
       
       // Refresh history
       await fetchHistory();
+
+      // Update active step
+      if (score.value >= 60) {
+        active.value = Math.max(active.value, level);
+      }
     }
   } catch (error) {
     console.error('Error submitting answer:', error);
@@ -352,7 +346,7 @@ const fetchHistory = async () => {
   }
 };
 
-const onCilckHistory = (row) => {
+const onClickHistory = (row) => {
   history_itemVisible.value = true;
   history_level.value = row.level;
   history_grade.value = row.grade;
@@ -410,7 +404,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.challedge{
+.challenge{
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
@@ -418,22 +412,13 @@ onMounted(async () => {
 
 .date {
   background-image: url('@/assets/img/date_background.png');
-  /* 替换为您的背景图片URL */
   background-size: cover;
-  /* 确保背景图片覆盖整个div */
   background-position: right top;
-  /* 将背景图位置设置为右上角 */
   height: 150px;
-  /* 根据需要设置高度 */
   width: 150px;
-  /* 根据需要设置宽度 */
-
   padding: 10px;
-  /* 给内容添加一些内边距 */
   position: absolute;
-  /* 使得绝对定位的子元素相对于此元素定位 */
   left: 82%;
-
 }
 
 .year {
@@ -446,25 +431,19 @@ onMounted(async () => {
 .day {
   font-size: 60px;
   color: black;
-  /* 设置文本颜色，以便在背景上可见 */
   margin-left: 27px;
 }
 
 .topic {
   background-image: url('@/assets/img/topic.png');
-  /* 图片原始大小 423*796，比例：0.53 */
   background-size: contain;
-  /* 确保背景图片覆盖整个div */
   background-position: center;
   background-repeat: no-repeat;
   width: 230px;
   height: 433px;
   display: flex;
-  /* 使用 flexbox 布局 */
   flex-direction: column;
-  /* 垂直排列子元素 */
   align-items: center;
-  /* 水平居中对齐子元素 */
   position: relative;
 }
 
@@ -490,7 +469,7 @@ onMounted(async () => {
   bottom: 400px;
 }
 
-.challedge_button {
+.challenge_button {
   height: 1px;
   width: 600px;
   position: relative;
@@ -508,20 +487,64 @@ onMounted(async () => {
 
 .success-message {
   animation: fadeIn 0.5s ease-in-out;
-  position: absolute;
-  left: 43%;
-  top: 43%;
-  padding: 20px;
-  background-color: var(--success_message_color);
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  width: 300px;
+  text-align: center;
+}
+
+.success-message--excellent {
+  background-color: #4CAF50;
   color: white;
-  border-radius: 5px;
-  z-index: 100;
+}
+
+.success-message--pass {
+  background-color: #2196F3;
+  color: white;
+}
+
+.success-message--fail {
+  background-color: #F44336;
+  color: white;
 }
 
 .success-message_close {
-  position: relative;
-  left: 90%;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
 
+.success-message_content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.success-message_header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.success-message_score {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.success-message_score span {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.success-message_suggestion {
+  font-size: 16px;
 }
 
 .history {
@@ -532,31 +555,19 @@ onMounted(async () => {
   bottom: 217px;
 }
 
-.history_time {
-  margin-bottom: 5px;
-}
-
-.history_level {
-  margin-bottom: 5px;
-}
-
-.history_grade {
-  margin-bottom: 5px;
-}
-
-.history_answer {
-  margin-bottom: 5px;
+.history_time, .history_level, .history_grade, .history_answer {
+  margin-bottom: 10px;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: scale(0.8);
+    transform: translate(-50%, -60%);
   }
 
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translate(-50%, -50%);
   }
 }
 </style>
