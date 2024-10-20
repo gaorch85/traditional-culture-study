@@ -65,6 +65,7 @@ const getResponse = async () => {
       inputString.value = ''
       aiResponse.value = '向导正在思考您的问题...'
       isGPTthinking.value = true
+      console.log(isGPTthinking.value)
       chatHistory.value.push({ content: aiResponse.value, isPerson: false })
     } else {
       ElMessage.error('网络异常')
@@ -88,10 +89,15 @@ const initWebsocket = () => {
 
   ws.value.onmessage = (event) => {
     if(isGPTthinking.value) {
+      console.log("enter",isGPTthinking.value)
       isGPTthinking.value = false
-      chatHistory.value[chatHistory.value.length - 1].content = ''
+      console.log("after", isGPTthinking.value)
+      aiResponse.value = ""
+      console.log(chatHistory.value[chatHistory.value.length - 1].content)
     }
+    console.log(chatHistory.value[chatHistory.value.length - 1].content)
     aiResponse.value += event.data // 追加收到的字符
+    console.log("add data: ", event.data)
     chatHistory.value[chatHistory.value.length - 1].content = aiResponse.value
   }
 
