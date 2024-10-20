@@ -2,7 +2,7 @@ def get_openai_chat_model(temperature=0.7):
     from langchain_openai import ChatOpenAI
 
     chat_model_openai = ChatOpenAI(
-        api_key="",
+        api_key="sk-UmqnxxRXO3avSFtQjhYobVT2Lpmz7suXQhbySB1Rl9VEUeSg",
         base_url="https://api.chatanywhere.tech",
         model="gpt-4o-mini",
         temperature=temperature,

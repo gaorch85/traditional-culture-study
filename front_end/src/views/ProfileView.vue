@@ -117,8 +117,11 @@ const updateUsername = async () => {
 }
 
 const handleAvatarSuccess = async (file) => {
+  console.log("enter handle")
   userInfo.value.avatarUrl = URL.createObjectURL(file.raw)
+  console.log("get the pic")
   const response = await api_uploadAvatar(file);
+  console.log("get the response")
   if(response.data.code == 200)
   {
     ElMessage.success('修改成功')
@@ -129,6 +132,7 @@ const handleAvatarSuccess = async (file) => {
 }
 
 const beforeAvatarUpload = (file) => {
+  console.log("enter before")
   const isJPG = file.type === 'image/jpeg'
   const isLt2M = file.size / 1024 / 1024 < 2
 
