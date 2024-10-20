@@ -2,14 +2,14 @@
   <div class="profile">
     <div class="user-profile">
       <aside class="sidebar">
-        <div class="avatar" @click="triggerUpload">
+        <div class="avatar-container">
           <el-upload
             class="avatar-uploader"
             :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
+            :auto-upload="false"
+            :on-change="handleAvatarChange"
           >
-            <img v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" class="avatar" />
+            <img v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" class="avatar" alt="Avatar" />
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
         </div>
@@ -116,33 +116,38 @@ const updateUsername = async () => {
   }
 }
 
-const handleAvatarSuccess = async (file) => {
-  console.log("enter handle")
-  userInfo.value.avatarUrl = URL.createObjectURL(file.raw)
-  console.log("get the pic")
-  const response = await api_uploadAvatar(file);
-  console.log("get the response")
-  if(response.data.code == 200)
-  {
-    ElMessage.success('修改成功')
-    await store.dispatch('user/getUserInfo')
+const handleAvatarChange = async (file) => {
+  if (!beforeAvatarUpload(file)) {
+    return
   }
-  else
-    ElMessage.error('修改失败')
+
+  try {
+    const response = await api_uploadAvatar(file.raw)
+    if (response.data.code === 200) {
+      ElMessage.success('头像修改成功')
+      await store.dispatch('user/getUserInfo')
+    } else {
+      ElMessage.error('头像上传失败')
+    }
+  } catch (error) {
+    console.error('上传出错:', error)
+    ElMessage.error('头像上传出错')
+  }
 }
 
 const beforeAvatarUpload = (file) => {
-  console.log("enter before")
   const isJPG = file.type === 'image/jpeg'
   const isLt2M = file.size / 1024 / 1024 < 2
 
   if (!isJPG) {
     ElMessage.error('上传头像图片只能是 JPG 格式!')
+    return false
   }
   if (!isLt2M) {
     ElMessage.error('上传头像图片大小不能超过 2MB!')
+    return false
   }
-  return isJPG && isLt2M
+  return true
 }
 
 onMounted(async () => {
@@ -182,24 +187,32 @@ onMounted(async () => {
     height:1038px;
   }
   
-  .avatar {
-    margin-left:30%;
-    position: relative;
-    cursor: pointer;
-    width: 100px;
-    height: 100px;
+  .avatar-uploader {
+    border: 1px dashed #d9d9d9;
     border-radius: 50%;
+    cursor: pointer;
+    position: relative;
     overflow: hidden;
-    border: 2px solid #e0e0e0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 178px;
+    height: 178px;
   }
-  
-  .avatar img {
+  .avatar-uploader:hover {
+    border-color: #409eff;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
     width: 100%;
     height: 100%;
+    display: block;
     object-fit: cover;
+    border-radius: 50%;
   }
   
   .user-info {
