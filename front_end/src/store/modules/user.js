@@ -41,18 +41,19 @@ const actions = {
       var response = await api_getUsername();
       var username = response.data.data;
       response = await api_getAvatar();
-      var avatarUrl = null;
-      if(response.data.code == 200)
-      {
-        console.log("enter the 200")
-        var avatarBlob = new Blob([avatarResponse.data.data], { type: 'image/png' });
-        avatarUrl = URL.createObjectURL(avatarBlob);
-      }
-      else
-      {
-        console.log("did not enter the 200")
-        avatarUrl = require('@/assets/avatar.png')
-      }
+      var avatarBlob = new Blob([avatarResponse.data.data], { type: 'image/png' });
+      avatarUrl = URL.createObjectURL(avatarBlob);
+      // if(response.data.code == 200)
+      // {
+      //   console.log("enter the 200")
+      //   var avatarBlob = new Blob([avatarResponse.data.data], { type: 'image/png' });
+      //   avatarUrl = URL.createObjectURL(avatarBlob);
+      // }
+      // else
+      // {
+      //   console.log("did not enter the 200")
+      //   avatarUrl = require('@/assets/avatar.png')
+      // }
   
       const userInfo = {
         username: username,
