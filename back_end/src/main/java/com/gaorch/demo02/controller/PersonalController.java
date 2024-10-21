@@ -55,12 +55,12 @@ public class PersonalController {
     }
 
     @GetMapping("/pic")
-    public Result getPic() throws UnsupportedEncodingException {
+    public ResponseEntity<Resource> getPic() throws UnsupportedEncodingException {
         return personalService.getPic();
     }
 
-    @PutMapping("/nickname")
-    public Result updateNickname(String nickname)
+    @PutMapping("/nickname/{nickname}")
+    public Result updateNickname(@PathVariable String nickname)
     {
         return personalService.updateNickname(nickname);
     }

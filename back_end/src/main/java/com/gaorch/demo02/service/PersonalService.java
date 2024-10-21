@@ -21,8 +21,6 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -79,7 +77,7 @@ public class PersonalService
         dailyMapper.deleteByUserId(id);
 
         //linux
-        File directory = new File("/home/pic/");
+        File directory = new File("/home/vivy/pic/");
         //windows
         //File directory = new File("D:\\pic\\");
         String filePath = "";
@@ -97,15 +95,23 @@ public class PersonalService
     public Result uploadPic(MultipartFile file) throws IOException {
         Integer userId = JwtUtils.getId(request);
 
-        //windows
-        //java.io.File directory = new java.io.File("D:\\pic\\");
-
         //linux
-        java.io.File directory = new java.io.File("/home/pic/");
+        File directory = new File("/home/vivy/pic/");
+        //windows
+        //File directory = new File("D:\\pic\\");
 
         if (!directory.exists()) {
             directory.mkdirs();
         }
+        String filePath = "";
+        File[] matchingFiles = directory.listFiles((dir, name) -> name.startsWith(userId + "_"));
+        if (matchingFiles != null && matchingFiles.length > 0) {
+            filePath = matchingFiles[0].getAbsolutePath();
+        }
+        Path ffilePath = Paths.get(filePath);
+        java.io.File f = ffilePath.toFile();
+        f.delete();
+
         String file_name = file.getOriginalFilename();
         file_name = URLDecoder.decode(file_name, "UTF-8");
 
@@ -120,11 +126,11 @@ public class PersonalService
         this.resourceLoader = resourceLoader;
     }
 
-    public Result getPic() throws UnsupportedEncodingException {
+    public ResponseEntity<Resource> getPic() throws UnsupportedEncodingException {
         String userId = JwtUtils.getId(request).toString();
 
         //linux
-        File directory = new File("/home/pic/");
+        File directory = new File("/home/vivy/pic/");
 
         //windows
         //File directory = new File("D:\\pic\\");
@@ -138,9 +144,14 @@ public class PersonalService
             String decodedPath = URLDecoder.decode(filePath, "UTF-8");
 
             Resource resource = resourceLoader.getResource("file:" + decodedPath);
-            return Result.ok(ResponseEntity.ok(resource));
+            return ResponseEntity.ok(resource);
         } else {
-            return Result.error(); // 找不到头像文件
+            matchingFiles = directory.listFiles((dir, name) -> name.startsWith("default"));
+            String filePath = matchingFiles[0].getAbsolutePath();
+            String decodedPath = URLDecoder.decode(filePath, "UTF-8");
+
+            Resource resource = resourceLoader.getResource("file:" + decodedPath);
+            return ResponseEntity.ok(resource);
         }
     }
 
