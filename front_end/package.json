@@ -19,10 +19,17 @@
     "vuex": "^4.0.0"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.25.9",
+    "@types/node": "^22.7.9",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-typescript": "^5.0.8",
     "@vue/cli-plugin-vuex": "~5.0.0",
-    "@vue/cli-service": "~5.0.0"
+    "@vue/cli-service": "~5.0.0",
+    "@vue/tsconfig": "^0.5.1",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.6.3",
+    "vue-loader": "^17.4.2"
   },
   "browserslist": [
     "> 1%",

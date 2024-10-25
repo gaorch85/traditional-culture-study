@@ -64,17 +64,16 @@ const router = useRouter()
 const showLoginDialog = inject('showLoginDialog')
 
 const allTopics = ref([
-  { title: '如何理解中国传统文化中的"中庸之道"？', description: '探讨中庸思想的现代意义' },
-  { title: '汉字的演变历程及其文化意义', description: '从甲骨文到简体字的历史长河' },
-  { title: '中国古代四大发明对世界文明的影响', description: '纸、指南针、火药、印刷术的贡献' },
+  { title: '如何理解中国传统文化中的"中庸之道"？', description: '用户：墨香斋主' },
+  { title: '汉字的演变历程及其文化意义', description: '用户：墨香斋主' },
+  { title: '中国古代四大发明对世界文明的影响', description: '用户：墨香斋主' },
   { title: '我的篆刻学习之路', description: '用户：墨香斋主' },
   { title: '从《论语》中学习为人处世的智慧', description: '用户：儒学爱好者' },
   { title: '中国传统节日的由来与现代传承', description: '用户：文化传播者' },
 ])
 
 const startExplore = () => {
-  // router.push('/explore')
-  showLoginDialog()
+  router.push('/explore')
 }
 
 const goToMap = (route) => {

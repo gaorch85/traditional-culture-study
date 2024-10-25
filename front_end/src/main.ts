@@ -21,3 +21,7 @@ app.config.globalProperties.$axios = axios
 app.config.globalProperties.$eventBus = eventBus
 app.use(store)
 app.mount('#app')
+
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}

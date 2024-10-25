@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import ExploreView from '../views/ExploreView.vue'
+import ExploreView from '../views/KnowledgeMap.vue'
 import CommunityView from '../views/CommunityView.vue'
 import ProfileView from '../views/ProfileView.vue'
 
