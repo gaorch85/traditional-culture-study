@@ -1,17 +1,22 @@
 <template>
   <!-- 修改: 重新设计顶部布局 -->
   <div class="header">
+    <div class="top-container">
+      <!-- 左侧主题区域 -->
       <div class="topic-section">
         <h1 class="topic-title">{{ today_topic }}</h1>
         <p class="topic-intro">{{ today_introduction }}</p>
       </div>
+      
+      <!-- 右侧日期卡片 -->
       <div class="date-card">
         <div class="date-content">
           <span class="year-month">{{ currentYear }}/{{ currentMonth }}</span>
           <span class="day">{{ currentDate }}</span>
         </div>
       </div>
-    
+    </div>
+
 
     <!-- 修改: 重新设计挑战进度和按钮区域 -->
     <div class="challenge-section">
@@ -27,14 +32,12 @@
         <el-button 
           class="challenge-btn simple"
           @click="onClickSimple"
-          type="primary"
           :icon="Document">
           挑战简单
         </el-button>
         <el-button 
           class="challenge-btn medium"
           @click="onClickMid"
-          type="warning"
           :disabled="isMid"
           :icon="DocumentAdd">
           挑战中等
@@ -42,7 +45,6 @@
         <el-button 
           class="challenge-btn hard"
           @click="onClickHard"
-          type="danger"
           :disabled="isHard"
           :icon="DocumentChecked">
           挑战困难
@@ -126,16 +128,19 @@
     </div>
 
     <div class="history-section">
-      <h2 class="history-title">答题历史</h2>
+      <div class="history-header">
+        <h2 class="history-title">答题历史</h2>
+        <div class="history-subtitle">查看你的答题记录和进步</div>
+      </div>
+      
       <el-table
         :data="tableData"
         class="custom-table"
-        height="300px"
-        style="width: 100%">
+        height="300px">
         <el-table-column prop="time" label="时间" width="180">
           <template #default="scope">
             <div class="table-cell">
-              <el-icon><Timer /></el-icon>
+              <el-icon class="cell-icon"><Timer /></el-icon>
               <span>{{ scope.row.time }}</span>
             </div>
           </template>
@@ -143,24 +148,27 @@
 
         <el-table-column prop="level" label="难度等级" width="180">
           <template #default="scope">
-            <div style="display: flex; align-items: center">
-              <span style="margin-left: 10px">{{ scope.row.level }}</span>
+            <div class="difficulty-badge" :class="getDifficultyClass(scope.row.level)">
+              {{ scope.row.level }}
             </div>
           </template>
         </el-table-column>
 
         <el-table-column prop="grade" label="分数" width="180">
           <template #default="scope">
-            <div style="display: flex; align-items: center">
-              <span style="margin-left: 10px">{{ scope.row.grade }}</span>
+            <div class="score-badge">
+              {{ scope.row.grade }}
             </div>
           </template>
         </el-table-column>
 
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button size="small" @click="onClickHistory(scope.row)">
-              查看
+            <el-button 
+              class="view-btn"
+              size="small" 
+              @click="onClickHistory(scope.row)">
+              查看详情
             </el-button>
           </template>
         </el-table-column>
@@ -452,6 +460,19 @@ onMounted(async () => {
     // You might want to show an error message to the user here
   }
 });
+
+const getDifficultyClass = (level) => {
+  switch (level) {
+    case '简单':
+      return 'simple';
+    case '中等':
+      return 'medium';
+    case '困难':
+      return 'hard';
+    default:
+      return '';
+  }
+};
 </script>
 
 <style scoped>
@@ -460,16 +481,19 @@ onMounted(async () => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.top-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 /* Topic Section */
 .topic-section {
   flex: 1;
-  margin-right: 2rem;
-  padding: 1rem 0;
 }
 
 .topic-title {
@@ -477,16 +501,17 @@ onMounted(async () => {
   color: #1a1f36;
   margin-bottom: 1rem;
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #1a1f36 0%, #4a5568 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .topic-intro {
   font-size: 1.1rem;
   color: #4a5568;
   line-height: 1.8;
-  margin-bottom: 2rem;
 }
+
 
 /* Date Card */
 .date-card {
@@ -494,30 +519,29 @@ onMounted(async () => {
   border-radius: 16px;
   padding: 1.5rem;
   color: white;
-  min-width: 180px;
+  min-width: 160px;
   text-align: center;
   box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .date-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(59, 130, 246, 0.3);
 }
 
 .year-month {
-  font-size: 1.1rem;
-  font-weight: 500;
+  font-size: 1rem;
   opacity: 0.9;
   display: block;
   margin-bottom: 0.5rem;
 }
 
 .day {
-  font-size: 3.5rem;
-  font-weight: 800;
+  font-size: 2.5rem;
+  font-weight: 700;
   line-height: 1;
 }
-
 /* Challenge Section */
 .challenge-section {
   background: #ffffff;
@@ -529,6 +553,14 @@ onMounted(async () => {
 
 .progress-steps {
   margin-bottom: 2rem;
+}
+
+.challenge-section {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .challenge-buttons {
@@ -544,23 +576,9 @@ onMounted(async () => {
   font-weight: 600;
   border-radius: 12px;
   transition: all 0.3s ease;
-  min-width: 140px;
 }
 
-.challenge-btn.simple {
-  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
-  border: none;
-}
 
-.challenge-btn.medium {
-  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-  border: none;
-}
-
-.challenge-btn.hard {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  border: none;
-}
 
 .challenge-btn:not(:disabled):hover {
   transform: translateY(-2px);
@@ -599,23 +617,41 @@ onMounted(async () => {
 
 /* History Section */
 .history-section {
-  background: #ffffff;
+  background: white;
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
+.history-header {
+  margin-bottom: 2rem;
+}
+
 .history-title {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: #1a1f36;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.history-subtitle {
+  color: #64748b;
+  font-size: 1rem;
 }
 
 .custom-table {
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid #e2e8f0;
+}
+
+.table-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cell-icon {
+  color: #64748b;
 }
 
 /* Success Message */
@@ -667,6 +703,51 @@ onMounted(async () => {
   color: #4a5568;
   line-height: 1.8;
   margin: 1rem 0;
+}
+
+.difficulty-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  width: fit-content;
+}
+
+.difficulty-badge.simple {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.difficulty-badge.medium {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.difficulty-badge.hard {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.score-badge {
+  padding: 0.25rem 0.75rem;
+  background-color: #f1f5f9;
+  border-radius: 20px;
+  font-weight: 600;
+  color: #334155;
+  width: fit-content;
+}
+
+.view-btn {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  transition: all 0.3s ease;
+}
+
+.view-btn:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
 }
 
 /* Responsive Design */
