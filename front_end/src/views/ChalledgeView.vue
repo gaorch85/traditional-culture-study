@@ -1,42 +1,79 @@
 <template>
-  <div class="challenge">
-    <div class="date">
-      <div class="year">{{ currentYear }}/{{ currentMonth }}</div>
-      <div class="day">{{ currentDate }}</div>
+  <!-- 修改: 重新设计顶部布局 -->
+  <div class="header">
+      <div class="topic-section">
+        <h1 class="topic-title">{{ today_topic }}</h1>
+        <p class="topic-intro">{{ today_introduction }}</p>
+      </div>
+      <div class="date-card">
+        <div class="date-content">
+          <span class="year-month">{{ currentYear }}/{{ currentMonth }}</span>
+          <span class="day">{{ currentDate }}</span>
+        </div>
+      </div>
+    
+
+    <!-- 修改: 重新设计挑战进度和按钮区域 -->
+    <div class="challenge-section">
+      <div class="progress-steps">
+        <el-steps :active="active" finish-status="success" class="custom-steps">
+          <el-step title="简单" :description="try_simple" />
+          <el-step title="中等" :description="try_mid" />
+          <el-step title="困难" :description="try_hard" />
+        </el-steps>
+      </div>
+      
+      <div class="challenge-buttons">
+        <el-button 
+          class="challenge-btn simple"
+          @click="onClickSimple"
+          type="primary"
+          :icon="Document">
+          挑战简单
+        </el-button>
+        <el-button 
+          class="challenge-btn medium"
+          @click="onClickMid"
+          type="warning"
+          :disabled="isMid"
+          :icon="DocumentAdd">
+          挑战中等
+        </el-button>
+        <el-button 
+          class="challenge-btn hard"
+          @click="onClickHard"
+          type="danger"
+          :disabled="isHard"
+          :icon="DocumentChecked">
+          挑战困难
+        </el-button>
+      </div>
     </div>
-    <div class="topic">
-      <div class="today_topic_1">今日主题</div>
-      <div class="today_topic_2">{{ today_topic }}</div>
-      <div class="introduction">{{ today_introduction }}</div>
-    </div>
-    <div class="step">
-      <el-steps style="max-width: 600px" :active="active" finish-status="success">
-        <el-step title="简单" :description="try_simple" />
-        <el-step title="中等" :description="try_mid" />
-        <el-step title="困难" :description="try_hard" />
-      </el-steps>
-    </div>
-    <div class="challenge_button">
-      <el-button class="cb" style="margin-top: 12px" @click="onClickSimple">挑战简单</el-button>
-      <el-button class="cb" style="margin-top: 12px" @click="onClickMid" :disabled="isMid">挑战中等</el-button>
-      <el-button style="margin-top: 12px" @click="onClickHard" :disabled="isHard">挑战困难</el-button>
-    </div>
-    <div class="question_area">
-      <el-dialog v-model="dialogFormVisible_simple" title="每日问答--简单" width="500">
-        <div class="question"><el-text>{{ simple_question }}</el-text></div>
+    <el-dialog
+      v-model="dialogFormVisible_simple"
+      title="每日问答--简单"
+      class="custom-dialog"
+      width="600px">
+      <div class="question-container">
+        <div class="question-content">{{ simple_question }}</div>
         <el-form :model="form" :rules="rules" ref="formRef">
           <el-form-item label="作答区" :label-width="formLabelWidth" prop="answer">
-            <el-input v-model="form.answer" style="width: 400px" :rows="5" type="textarea" placeholder="输入你的答案..." />
+            <el-input
+              v-model="form.answer"
+              type="textarea"
+              :rows="6"
+              placeholder="请输入你的答案..."
+              class="custom-textarea"
+            />
           </el-form-item>
-          <el-form-item>
+          <el-form-item class="dialog-footer">
             <el-button @click="dialogFormVisible_simple = false">取消</el-button>
-            <el-button type="primary" @click="onsubmit(1)">
-              提交
-            </el-button>
+            <el-button type="primary" @click="onsubmit(1)">提交答案</el-button>
           </el-form-item>
         </el-form>
-      </el-dialog>
-    </div>
+      </div>
+    </el-dialog>
+
     <div class="question_area">
       <el-dialog v-model="dialogFormVisible_mid" title="每日问答--中等" width="500">
         <div class="question"><el-text>{{ mid_question }}</el-text></div>
@@ -71,21 +108,35 @@
     </div>
 
     <div v-if="successVisible" class="success-message" :class="scoreClass">
-      <div class="success-message_close"><el-icon @click="successVisible = false;"><CloseBold /></el-icon></div>
-      <div class="success-message_content">
-        <div class="success-message_header">{{ suggestion_before }}</div>
-        <div class="success-message_score">你的分数：<span>{{ score }}</span></div>
-        <div class="success-message_suggestion">{{ suggestion }}</div>
+      <div class="success-content">
+        <div class="success-icon">
+          <el-icon size="48px">
+            <component :is="scoreIcon"></component>
+          </el-icon>
+        </div>
+        <h2 class="success-header">{{ suggestion_before }}</h2>
+        <div class="success-score">
+          得分: <span>{{ score }}</span>
+        </div>
+        <div class="success-feedback">{{ suggestion }}</div>
+        <el-button class="close-btn" @click="successVisible = false">
+          关闭
+        </el-button>
       </div>
     </div>
 
-    <div class="history">
-      <el-table :data="tableData" height="200px" style="width: 100% ">
-        <el-table-column prop="time" label="尝试时间" width="180">
+    <div class="history-section">
+      <h2 class="history-title">答题历史</h2>
+      <el-table
+        :data="tableData"
+        class="custom-table"
+        height="300px"
+        style="width: 100%">
+        <el-table-column prop="time" label="时间" width="180">
           <template #default="scope">
-            <div style="display: flex; align-items: center">
-              <el-icon><timer /></el-icon>
-              <span style="margin-left: 10px">{{ scope.row.time }}</span>
+            <div class="table-cell">
+              <el-icon><Timer /></el-icon>
+              <span>{{ scope.row.time }}</span>
             </div>
           </template>
         </el-table-column>
@@ -404,170 +455,260 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.challenge{
+.header {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-.date {
-  background-image: url('@/assets/img/date_background.png');
-  background-size: cover;
-  background-position: right top;
-  height: 150px;
-  width: 150px;
-  padding: 10px;
-  position: absolute;
-  left: 82%;
+/* Topic Section */
+.topic-section {
+  flex: 1;
+  margin-right: 2rem;
+  padding: 1rem 0;
 }
 
-.year {
-  font-size: xx-large;
-  margin-top: 20px;
-  margin-left: 7px;
-  color: black;
+.topic-title {
+  font-size: 2.5rem;
+  color: #1a1f36;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.topic-intro {
+  font-size: 1.1rem;
+  color: #4a5568;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+/* Date Card */
+.date-card {
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: white;
+  min-width: 180px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.date-card:hover {
+  transform: translateY(-5px);
+}
+
+.year-month {
+  font-size: 1.1rem;
+  font-weight: 500;
+  opacity: 0.9;
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
 .day {
-  font-size: 60px;
-  color: black;
-  margin-left: 27px;
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
 }
 
-.topic {
-  background-image: url('@/assets/img/topic.png');
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 230px;
-  height: 433px;
+/* Challenge Section */
+.challenge-section {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.progress-steps {
+  margin-bottom: 2rem;
+}
+
+.challenge-buttons {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
-.today_topic_1 {
-  margin-top: 7px;
-  font-size: x-large;
+.challenge-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  min-width: 140px;
 }
 
-.today_topic_2 {
-  font-size: 50px;
-  margin-bottom: 10px;
+.challenge-btn.simple {
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+  border: none;
 }
 
-.introduction {
-  width: 80%;
+.challenge-btn.medium {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  border: none;
 }
 
-.step {
-  height: 1px;
-  width: 540px;
-  position: relative;
-  left: 330px;
-  bottom: 400px;
+.challenge-btn.hard {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: none;
 }
 
-.challenge_button {
-  height: 1px;
-  width: 600px;
-  position: relative;
-  left: 300px;
-  bottom: 300px;
+.challenge-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
-.cb {
-  margin-right: 140px;
+/* Dialog Styles */
+.custom-dialog {
+  border-radius: 20px;
 }
 
-.question {
-  margin: 15px;
+.question-container {
+  padding: 1.5rem;
 }
 
+.question-content {
+  font-size: 1.1rem;
+  color: #1a1f36;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.custom-textarea {
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.custom-textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* History Section */
+.history-section {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.history-title {
+  font-size: 1.5rem;
+  color: #1a1f36;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.custom-table {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+/* Success Message */
 .success-message {
-  animation: fadeIn 0.5s ease-in-out;
   position: fixed;
-  left: 50%;
   top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  width: 300px;
-  text-align: center;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 500px;
+  z-index: 1001; /* 确保在遮罩层之上 */
 }
-
 .success-message--excellent {
-  background-color: #4CAF50;
-  color: white;
+  border-top: 5px solid #22c55e;
 }
 
 .success-message--pass {
-  background-color: #2196F3;
-  color: white;
+  border-top: 5px solid #3b82f6;
 }
 
 .success-message--fail {
-  background-color: #F44336;
-  color: white;
+  border-top: 5px solid #ef4444;
 }
 
-.success-message_close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
-}
-
-.success-message_content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.success-message_header {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.success-message_score {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.success-message_score span {
-  font-weight: bold;
-  font-size: 24px;
-}
-
-.success-message_suggestion {
-  font-size: 16px;
-}
-
-.history {
-  height: 2px;
+.success-content {
   position: relative;
-  width: 620px;
-  left: 300px;
-  bottom: 217px;
+  padding: 2rem;
+  text-align: center;
 }
 
-.history_time, .history_level, .history_grade, .history_answer {
-  margin-bottom: 10px;
+.success-header {
+  font-size: 1.5rem;
+  color: #1a1f36;
+  margin-bottom: 1rem;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -60%);
+.success-score {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #3b82f6;
+  margin: 1rem 0;
+}
+
+.success-feedback {
+  color: #4a5568;
+  line-height: 1.8;
+  margin: 1rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
   }
 
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
+  .topic-title {
+    font-size: 2rem;
   }
+
+  .date-card {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .challenge-buttons {
+    flex-direction: column;
+  }
+
+  .challenge-btn {
+    width: 100%;
+  }
+
+  .success-message {
+    width: 95%;
+    margin: 0 1rem;
+  }
+}
+
+/* Additional Utility Classes */
+.table-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dialog-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
 }
 </style>
