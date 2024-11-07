@@ -123,17 +123,6 @@ export default {
         }
 
 
-        // // 模拟获取 token 成功
-        // const token = 'mock_token_' + Date.now()
-        // setToken(token)
-
-        // // 不直接设置用户信息，而是触发获取用户信息的 action
-        // await store.dispatch('user/getUserInfo')
-        
-        // ElMessage.success(isLogin.value ? '登录成功' : '注册成功')
-        // emit('login-success')
-        // handleClose()
-
         
       } catch (error) {
         ElMessage.error('网络异常')

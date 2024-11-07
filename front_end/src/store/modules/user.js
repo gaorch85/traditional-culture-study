@@ -43,17 +43,6 @@ const actions = {
       response = await api_getAvatar();
       var avatarBlob = new Blob([response.data], { type: 'image/png' });
       var avatarUrl = URL.createObjectURL(avatarBlob);
-      // if(response.data.code == 200)
-      // {
-      //   console.log("enter the 200")
-      //   var avatarBlob = new Blob([avatarResponse.data.data], { type: 'image/png' });
-      //   avatarUrl = URL.createObjectURL(avatarBlob);
-      // }
-      // else
-      // {
-      //   console.log("did not enter the 200")
-      //   avatarUrl = require('@/assets/avatar.png')
-      // }
   
       const userInfo = {
         username: username,

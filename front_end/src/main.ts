@@ -8,6 +8,7 @@ import 'element-plus/dist/index.css'
 import axios from 'axios'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import eventBus from './util/eventBus'
+import './assets/iconfont/iconfont.css'; 
 
 const app = createApp(App)
 

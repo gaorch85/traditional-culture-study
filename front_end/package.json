@@ -13,6 +13,7 @@
     "highlight": "^0.2.4",
     "markdown-it": "^14.1.0",
     "markdown-it-katex": "^2.0.3",
+    "mavon-editor": "^3.0.1",
     "mitt": "^3.0.1",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",

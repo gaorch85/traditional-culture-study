@@ -88,7 +88,7 @@ function formatDate(date) {
   return `${year}-${month}-${day}`
 }
 
-onMounted(async () => {
+const init = async () => {
   try {
     const topicsResponse = await api_listTopics()
     if (topicsResponse.data.code === 200) {
@@ -125,6 +125,10 @@ onMounted(async () => {
     console.error('Error fetching data:', error)
     ElMessage.error('获取数据失败')
   }
+}
+
+onMounted(async () => {
+  init();
 })
 
 const calculateStats = () => {

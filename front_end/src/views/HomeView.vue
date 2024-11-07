@@ -46,7 +46,7 @@
           <el-col :span="8" v-for="(topic, index) in allTopics" :key="index">
             <el-card class="community-card" @click="goToBlog(index + 1)">
               <h3>{{ topic.title }}</h3>
-              <p>{{ topic.description }}</p>
+              <p>{{ "用户：" + topic.username }}</p>
             </el-card>
           </el-col>
         </el-row>
@@ -56,21 +56,35 @@
 </template>
 
 <script setup>
-import { ref, inject } from 'vue'
+import { ref, inject, onMounted } from 'vue'
+import { getToken, setToken, removeToken } from '@/util/auth'
 import { useRouter } from 'vue-router'
+import { api_getHot } from '@/api/blog'
 import DailyChallenge from '@/components/DailyChallenge.vue'
 
 const router = useRouter()
 const showLoginDialog = inject('showLoginDialog')
 
-const allTopics = ref([
-  { title: '如何理解中国传统文化中的"中庸之道"？', description: '用户：墨香斋主' },
-  { title: '汉字的演变历程及其文化意义', description: '用户：墨香斋主' },
-  { title: '中国古代四大发明对世界文明的影响', description: '用户：墨香斋主' },
-  { title: '我的篆刻学习之路', description: '用户：墨香斋主' },
-  { title: '从《论语》中学习为人处世的智慧', description: '用户：儒学爱好者' },
-  { title: '中国传统节日的由来与现代传承', description: '用户：文化传播者' },
-])
+const allTopics = ref([])
+
+onMounted(async () => {
+  if(getToken())
+  {
+    const response = await api_getHot();
+    allTopics.value = response.data.data.items;
+  }
+  else 
+  {
+    allTopics.value = [
+      { title: '如何理解中国传统文化中的"中庸之道"？', username: '墨香斋主' },
+      { title: '汉字的演变历程及其文化意义', username: '墨香斋主' },
+      { title: '中国古代四大发明对世界文明的影响', username: '墨香斋主' },
+      { title: '我的篆刻学习之路', username: '墨香斋主' },
+      { title: '从《论语》中学习为人处世的智慧', username: '儒学爱好者' },
+      { title: '中国传统节日的由来与现代传承', username: '文化传播者' },
+    ]
+  }
+})
 
 const startExplore = () => {
   router.push('/explore')

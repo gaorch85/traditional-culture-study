@@ -43,6 +43,7 @@ import ChatHistory from './ChatHistory.vue'
 import { ElMessage } from 'element-plus'
 import { api_listChatHistory, api_getResponse} from '@/api/chat'
 import { api_getUserId } from '@/api/user'
+import { getToken } from '@/util/auth'
 const dialogVisible = ref(false)
 const inputString = ref('')
 const aiResponse = ref('')
@@ -119,7 +120,7 @@ const sendWebsocket = (data) => {
   }
 }
 
-onMounted(async () => {
+const init = async () => {
   const response = await api_listChatHistory()
   if(response.data.code === 200) {
     chatHistory.value = response.data.data
@@ -134,7 +135,13 @@ onMounted(async () => {
   } else {
     ElMessage.error('网络异常')
   }
-  
+}
+
+onMounted(async () => {
+  if(getToken())
+  {
+    init();
+  }
 })
 
 // 监听对话框关闭，关闭WebSocket连接
