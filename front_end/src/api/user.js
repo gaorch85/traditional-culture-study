@@ -29,7 +29,7 @@ export function api_deactivateAccount() {
 // 获取用户名
 export function api_getUsername() {
     return request({
-      url: `/nickname`,
+      url: `/username`,
       method: 'get'
     })
 }
@@ -37,7 +37,7 @@ export function api_getUsername() {
 // 更改用户名
 export function api_updateUsername(username) {
     return request({
-      url: `/nickname/${username}`,
+      url: `/username/${username}`,
       method: 'put',
     })
 }
