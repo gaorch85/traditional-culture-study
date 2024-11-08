@@ -188,7 +188,7 @@
                   if(response.data.code = 40000)
                   {
                     this.$message.success('删除文章成功!');
-                    this.$router.push({ name: "Blog-List"});
+                    this.$router.push({ name: "community"});
                     this.$emit('blogDeleted', this.postId);
                   }
                 });

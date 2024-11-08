@@ -95,7 +95,7 @@ const goToMap = (route) => {
 }
 
 const goToBlog = (id) => {
-  router.push(`/blog/${id}`)
+  router.push(`/blog/details/${id}`)
 }
 </script>
 
