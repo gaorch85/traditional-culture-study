@@ -1,7 +1,7 @@
 package com.gaorch.demo02.controller;
 
 import com.gaorch.demo02.entity.Blog;
-import com.gaorch.demo02.entity.BlogComment;
+import com.gaorch.demo02.entity.Comment;
 import com.gaorch.demo02.service.BlogCommentService;
 import com.gaorch.demo02.service.BlogFavoriteService;
 import com.gaorch.demo02.service.BlogLikeService;
@@ -118,10 +118,10 @@ public class BlogController {
     }
 
     @PostMapping("/blog/comment/{postId}")
-    public Response addComment(@PathVariable Integer postId,@RequestBody BlogComment blogComment)
+    public Response addComment(@PathVariable Integer postId,@RequestBody Comment comment)
     {
-        System.out.println(blogComment);
-        Result1 result1 = blogCommentService.insert(postId, blogComment.getContent());
+        System.out.println(comment);
+        Result1 result1 = blogCommentService.insert(postId, comment.getContent());
         return result1.isSuccess() ? Response.ok() : Response.error();
     }
 
@@ -136,7 +136,8 @@ public class BlogController {
     public Response hotlist()
     {
         Result1 result1 = blogService.hotlist();
-        return result1.isSuccess() ? Response.ok() : Response.error();
+        return result1.isSuccess() ?
+                Response.ok().setData(result1.getData()) : Response.error();
     }
 
 }

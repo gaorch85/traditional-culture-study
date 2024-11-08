@@ -1,6 +1,6 @@
 package com.gaorch.demo02.service;
 
-import com.gaorch.demo02.entity.BlogLike;
+import com.gaorch.demo02.entity.Love;
 import com.gaorch.demo02.entity.User;
 import com.gaorch.demo02.mapper.BlogLikeMapper;
 import com.gaorch.demo02.mapper.UserMapper;
@@ -24,7 +24,7 @@ public class BlogLikeService {
     @Autowired
     private HttpServletRequest request;
 
-    public List<BlogLike> getLikesByBlogId(Integer blogId)
+    public List<Love> getLikesByBlogId(Integer blogId)
     {
         return blogLikeMapper.selectByBlogId(blogId);
     }
@@ -64,11 +64,11 @@ public class BlogLikeService {
     {
         User user = userMapper.selectByAccount(JwtUtils.getAccount(request));
         Integer userId = user.getId();
-        BlogLike blogLike = new BlogLike();
-        blogLike.setId(0);
-        blogLike.setUserId(userId);
-        blogLike.setBlogId(blogId);
-        int i = blogLikeMapper.insert(blogLike);
+        Love love = new Love();
+        love.setId(0);
+        love.setUserId(userId);
+        love.setBlogId(blogId);
+        int i = blogLikeMapper.insert(love);
         return i > 0 ? Result1.ok() : Result1.error();
     }
 

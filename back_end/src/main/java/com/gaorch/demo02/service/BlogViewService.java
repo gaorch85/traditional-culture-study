@@ -1,6 +1,6 @@
 package com.gaorch.demo02.service;
 
-import com.gaorch.demo02.entity.BlogView;
+import com.gaorch.demo02.entity.View;
 import com.gaorch.demo02.mapper.BlogViewMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,11 +30,11 @@ public class BlogViewService {
     {
         if(blogViewMapper.getBlogViewByBlogIdAndUserId(blogId, userId)==null)
         {
-            BlogView blogView = new BlogView();
-            blogView.setId(0);
-            blogView.setBlogId(blogId);
-            blogView.setUserId(userId);
-            blogViewMapper.insert(blogView);
+            View view = new View();
+            view.setId(0);
+            view.setBlogId(blogId);
+            view.setUserId(userId);
+            blogViewMapper.insert(view);
             return true;
         }
         else

@@ -1,6 +1,6 @@
 package com.gaorch.demo02.service;
 
-import com.gaorch.demo02.entity.BlogComment;
+import com.gaorch.demo02.entity.Comment;
 import com.gaorch.demo02.entity.User;
 import com.gaorch.demo02.mapper.BlogCommentMapper;
 import com.gaorch.demo02.mapper.UserMapper;
@@ -26,12 +26,12 @@ public class BlogCommentService {
 
     public Result1 getCommentsByBlogId(Integer blogId)
     {
-        List<BlogComment> comments = blogCommentMapper.selectByBlogId(blogId);
+        List<Comment> comments = blogCommentMapper.selectByBlogId(blogId);
 
         User user = userMapper.selectByAccount(JwtUtils.getAccount(request));
         Integer userId = user.getId();
 
-        for(BlogComment curComment: comments)
+        for(Comment curComment: comments)
         {
             User curUser = userMapper.selectById(curComment.getUserId());
             curComment.setUsername(curUser.getUsername());
@@ -63,7 +63,7 @@ public class BlogCommentService {
         User user = userMapper.selectByAccount(JwtUtils.getAccount(request));
         Integer userId = user.getId();
 
-        BlogComment blogComment = new BlogComment();
+        Comment blogComment = new Comment();
         blogComment.setUserId(userId);
         blogComment.setBlogId(postId);
         blogComment.setId(0);

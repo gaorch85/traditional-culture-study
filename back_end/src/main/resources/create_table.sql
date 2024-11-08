@@ -48,45 +48,45 @@ CREATE TABLE `user` (
 CREATE TABLE blog
 (
     id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-    userId  BIGINT       NOT NULL,
+    user_id  BIGINT       NOT NULL,
     time      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     title     VARCHAR(255) NOT NULL,
     content   TEXT         NOT NULL,
-    isPublic BOOLEAN               DEFAULT 0
+    is_public BOOLEAN               DEFAULT 0
 );
 
 CREATE TABLE comment
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    blogId    BIGINT NOT NULL,
-    userId    BIGINT NOT NULL,
+    blog_id    BIGINT NOT NULL,
+    user_id    BIGINT NOT NULL,
     content    TEXT   NOT NULL,
     region    varchar(255)   NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE love
 (
     id        BIGINT AUTO_INCREMENT PRIMARY KEY,
-    userId    BIGINT NOT NULL,
-    blogId    BIGINT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id    BIGINT NOT NULL,
+    blog_id    BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE favorite
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    userId    BIGINT NOT NULL,
-    blogId    BIGINT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id    BIGINT NOT NULL,
+    blog_id    BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE view
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    userId    BIGINT NOT NULL,
-    blogId    BIGINT NOT NULL,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id    BIGINT NOT NULL,
+    blog_id    BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TRIGGER before_insert_answer

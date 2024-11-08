@@ -95,6 +95,7 @@ public class BlogService
     {
         System.out.println("hotlist");
         List<Blog> list = this.getRecommendBlogs();
+
         if (list.size() > 6)
         {
             list = list.subList(0, 6);

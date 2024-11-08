@@ -1,6 +1,6 @@
 package com.gaorch.demo02.service;
 
-import com.gaorch.demo02.entity.BlogFavorite;
+import com.gaorch.demo02.entity.Favorite;
 import com.gaorch.demo02.entity.User;
 import com.gaorch.demo02.mapper.BlogFavoriteMapper;
 import com.gaorch.demo02.mapper.UserMapper;
@@ -24,7 +24,7 @@ public class BlogFavoriteService {
     @Autowired
     private HttpServletRequest request;
 
-    public List<BlogFavorite> getFavoritessByBlogId(Integer blogId)
+    public List<Favorite> getFavoritessByBlogId(Integer blogId)
     {
         return blogFavoriteMapper.selectByBlogId(blogId);
     }
@@ -63,11 +63,11 @@ public class BlogFavoriteService {
     {
         User user = userMapper.selectByAccount(JwtUtils.getAccount(request));
         Integer userId = user.getId();
-        BlogFavorite blogFavorite = new BlogFavorite();
-        blogFavorite.setId(0);
-        blogFavorite.setUserId(userId);
-        blogFavorite.setBlogId(blogId);
-        int i = blogFavoriteMapper.insert(blogFavorite);
+        Favorite favorite = new Favorite();
+        favorite.setId(0);
+        favorite.setUserId(userId);
+        favorite.setBlogId(blogId);
+        int i = blogFavoriteMapper.insert(favorite);
         return i > 0 ? Result1.ok() : Result1.error();
     }
 

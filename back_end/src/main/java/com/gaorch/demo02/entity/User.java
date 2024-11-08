@@ -9,5 +9,5 @@ public class User {
     private String password;
     private String username;
     private String salt;
-    private Integer score;
+    private Integer points;
 }
