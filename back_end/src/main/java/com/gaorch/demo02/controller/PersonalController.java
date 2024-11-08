@@ -38,11 +38,6 @@ public class PersonalController {
         return personalService.changePassword(user);
     }
 
-    @PutMapping("/changeUsername/{username}")
-    public Result changeUsername(@PathVariable String username) {
-       return personalService.updateUsername(username);
-    }
-
     @DeleteMapping("/user")
     public Result delete()
     {
@@ -59,16 +54,16 @@ public class PersonalController {
         return personalService.getPic();
     }
 
-    @PutMapping("/nickname/{nickname}")
-    public Result updateNickname(@PathVariable String nickname)
+    @PutMapping("/username/{username}")
+    public Result updateUsername(@PathVariable String username)
     {
-        return personalService.updateNickname(nickname);
+        return personalService.updateUsername(username);
     }
 
-    @GetMapping("/nickname")
-    public Result getNickname()
+    @GetMapping("/username")
+    public Result getUsername()
     {
-        return personalService.getNickname();
+        return personalService.getUsername();
     }
 
     @PostMapping("/points/{pnts}")

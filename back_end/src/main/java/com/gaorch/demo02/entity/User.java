@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class User {
     private Integer id;
-    private String username;
+    private String account;
     private String password;
-    private String nickname;
+    private String username;
     private String salt;
     private Integer score;
 }

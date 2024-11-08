@@ -8,23 +8,23 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-    @Select("SELECT * FROM user WHERE username = #{username}")
-    public User selectByUsername(String username);
+    @Select("SELECT * FROM user WHERE account = #{account}")
+    public User selectByAccount(String account);
 
-    @Select("SELECT id FROM user WHERE username = #{username}")
-    public Integer getIdByUsername(String username);
+    @Select("SELECT id FROM user WHERE account = #{account}")
+    public Integer getIdByAccount(String account);
 
-    @Select("SELECT username FROM user WHERE id = #{id}")
-    public String getUsernameById(Integer id);
+    @Select("SELECT account FROM user WHERE id = #{id}")
+    public String getAccountById(Integer id);
+
+    @Update("update user set account = #{account} where id = #{id}")
+    public int updateAccountById(String account, Integer id);
 
     @Update("update user set username = #{username} where id = #{id}")
     public int updateUsernameById(String username, Integer id);
 
-    @Update("update user set nickname = #{nickname} where id = #{id}")
-    public int updateNicknameById(String nickname, Integer id);
-
-    @Select("select nickname from user where id = #{id}")
-    public String selectNickname(Integer id);
+    @Select("select username from user where id = #{id}")
+    public String selectUsername(Integer id);
 
     @Update("update user set points = #{points} where id = #{id}")
     public int updatePoints(Integer points, Integer id);

@@ -29,13 +29,13 @@ public class JwtUtils {
     }
 
 
-    public static String generateToken(String username)
+    public static String generateToken(String account)
     {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + 1000 * expire);
         return Jwts.builder()
                 .setHeaderParam("type","JWT")
-                .setSubject(username)
+                .setSubject(account)
                 .setIssuedAt(now)
                 .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS512, secret)
@@ -53,8 +53,8 @@ public class JwtUtils {
     public static boolean isAuthrize(String token)
     {
         try {
-            String username = JwtUtils.getClaimsByToken(token).getSubject();    //token不正确或者过期，抛出异常
-            if (userMapper.selectByUsername(username) != null) {
+            String account = JwtUtils.getClaimsByToken(token).getSubject();    //token不正确或者过期，抛出异常
+            if (userMapper.selectByAccount(account) != null) {
                 return true;
             } else
                 return false;
@@ -66,14 +66,14 @@ public class JwtUtils {
 
     public static Integer getId(HttpServletRequest request)
     {
-        Integer userId = userMapper.getIdByUsername(getUserName(request));
+        Integer userId = userMapper.getIdByAccount(getAccount(request));
         return userId;
     }
 
-    public static String getUserName(HttpServletRequest request)
+    public static String getAccount(HttpServletRequest request)
     {
         String token = request.getHeader("X-token");
-        String username = JwtUtils.getClaimsByToken(token).getSubject();
-        return username;
+        String account = JwtUtils.getClaimsByToken(token).getSubject();
+        return account;
     }
 }

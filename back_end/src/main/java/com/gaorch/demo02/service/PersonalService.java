@@ -41,8 +41,8 @@ public class PersonalService
 
     public Result getInfo()
     {
-        String username = JwtUtils.getUserName(request);
-        User user = userMapper.selectByUsername(username);
+        String account = JwtUtils.getAccount(request);
+        User user = userMapper.selectByAccount(account);
         return Result.ok(user);
     }
 
@@ -54,19 +54,19 @@ public class PersonalService
 
     public Result changePassword(User user)
     {
-        String username = JwtUtils.getUserName(request);
+        String account = JwtUtils.getAccount(request);
         String password = user.getPassword();
-        User selectUser = userMapper.selectByUsername(username);
+        User selectUser = userMapper.selectByAccount(account);
         selectUser.setSalt(PasswordUtils.generateSalt());
         selectUser.setPassword(PasswordUtils.hashPassword(password, selectUser.getSalt()));
         userMapper.updateById(selectUser);
         return Result.ok();
     }
 
-    public Result updateUsername(String username)
+    public Result updateAccount(String account)
     {
         Integer id = JwtUtils.getId(request);
-        userMapper.updateUsernameById(username, id);
+        userMapper.updateAccountById(account, id);
         return Result.ok();
     }
 
@@ -155,18 +155,18 @@ public class PersonalService
         }
     }
 
-    public Result updateNickname(String nickname)
+    public Result updateUsername(String username)
     {
         Integer userId = JwtUtils.getId(request);
-        userMapper.updateNicknameById(nickname, userId);
+        userMapper.updateUsernameById(username, userId);
         return Result.ok();
     }
 
-    public Result getNickname()
+    public Result getUsername()
     {
         Integer userId = JwtUtils.getId(request);
-        String nickname = userMapper.selectNickname(userId);
-        return Result.ok(nickname);
+        String username = userMapper.selectUsername(userId);
+        return Result.ok(username);
     }
 
     public Result points(Integer pnts)

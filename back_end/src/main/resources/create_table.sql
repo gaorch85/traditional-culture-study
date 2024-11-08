@@ -36,14 +36,58 @@ CREATE TABLE `theme` (
 
 CREATE TABLE `user` (
                         `id` bigint NOT NULL AUTO_INCREMENT,
-                        `username` varchar(255) NOT NULL,
+                        `account` varchar(255) NOT NULL,
                         `password` varchar(255) NOT NULL,
-                        `nickname` varchar(255) DEFAULT '小明',
+                        `username` varchar(255) DEFAULT '小明',
                         `salt` varchar(255) NOT NULL,
                         `points` int DEFAULT '0',
                         PRIMARY KEY (`id`),
-                        UNIQUE KEY `username` (`username`)
+                        UNIQUE KEY `username` (`account`)
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+CREATE TABLE blog
+(
+    id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+    userId  BIGINT       NOT NULL,
+    time      TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    title     VARCHAR(255) NOT NULL,
+    content   TEXT         NOT NULL,
+    isPublic BOOLEAN               DEFAULT 0
+);
+
+CREATE TABLE comment
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    blogId    BIGINT NOT NULL,
+    userId    BIGINT NOT NULL,
+    content    TEXT   NOT NULL,
+    region    varchar(255)   NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE love
+(
+    id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+    userId    BIGINT NOT NULL,
+    blogId    BIGINT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE favorite
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    userId    BIGINT NOT NULL,
+    blogId    BIGINT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE view
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    userId    BIGINT NOT NULL,
+    blogId    BIGINT NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TRIGGER before_insert_answer
     BEFORE INSERT ON answer
