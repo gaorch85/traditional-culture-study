@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    
     <el-row class="hero" type="flex" justify="center" align="middle">
       <el-col :span="16" class="text-center">
         <h1 class="hero-title">探索中华文化的奥秘</h1>
@@ -11,25 +10,11 @@
 
     <el-row class="features" :gutter="20">
       <el-col :span="16">
-        <el-row :gutter="20">
+        <el-row :gutter="20" v-for="(module, index) in randomModules" :key="module.id">
           <el-col :span="24">
-            <el-card class="feature-card" @click="goToMap('/map1')">
-              <h3>文化知识地图 1</h3>
-              <p>可视化知识结构，探索文化脉络</p>
-              <p>占位符</p>
-              <p>占位符</p>
-              <p>占位符</p>
-            </el-card>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20" style="margin-top: 40px;">
-          <el-col :span="24">
-            <el-card class="feature-card" @click="goToMap('/map2')">
-              <h3>文化知识地图 2</h3>
-              <p>可视化知识结构，探索文化脉络</p>
-              <p>占位符</p>
-              <p>占位符</p>
-              <p>占位符</p>
+            <el-card class="feature-card" @click="goToMap(module.id)">
+              <h3>{{ module.title }}</h3>
+              <p>{{ module.overview }}</p>
             </el-card>
           </el-col>
         </el-row>
@@ -61,20 +46,47 @@ import { getToken, setToken, removeToken } from '@/util/auth'
 import { useRouter } from 'vue-router'
 import { api_getHot } from '@/api/blog'
 import DailyChallenge from '@/components/DailyChallenge.vue'
+import data from './Explore/data.json'
 
 const router = useRouter()
 const showLoginDialog = inject('showLoginDialog')
 
 const allTopics = ref([])
+const randomModules = ref([])
+
+// Function to get two unique random modules
+const getRandomModules = () => {
+  const shuffled = [...data.posts].sort(() => 0.5 - Math.random())
+  return shuffled.slice(0, 2)
+}
+
+// Function to extract overview content
+const extractOverview = async (postId) => {
+  try {
+    const response = await fetch(`/data/${postId}.md`)
+    const content = await response.text()
+    
+    // Find the overview section
+    const overviewMatch = content.match(/##\s*概述([\s\S]*?)##/i)
+    
+    if (overviewMatch && overviewMatch[1]) {
+      // Remove extra whitespace and newlines
+      return overviewMatch[1].trim().replace(/\n/g, ' ')
+    }
+    
+    return '暂无内容'
+  } catch (error) {
+    console.error('Failed to fetch module content:', error)
+    return '内容加载失败'
+  }
+}
 
 onMounted(async () => {
-  if(getToken())
-  {
-    const response = await api_getHot();
-    allTopics.value = response.data.data.items;
-  }
-  else 
-  {
+  // Fetch hot topics
+  if(getToken()) {
+    const response = await api_getHot()
+    allTopics.value = response.data.data.items
+  } else {
     allTopics.value = [
       { title: '如何理解中国传统文化中的"中庸之道"？', username: '墨香斋主' },
       { title: '汉字的演变历程及其文化意义', username: '墨香斋主' },
@@ -84,14 +96,26 @@ onMounted(async () => {
       { title: '中国传统节日的由来与现代传承', username: '文化传播者' },
     ]
   }
+
+  // Get random modules and fetch their content
+  const randomPosts = getRandomModules()
+  
+  const modulesWithContent = await Promise.all(
+    randomPosts.map(async (post) => ({
+      ...post,
+      overview: await extractOverview(post.id)
+    }))
+  )
+
+  randomModules.value = modulesWithContent
 })
 
 const startExplore = () => {
   router.push('/explore')
 }
 
-const goToMap = (route) => {
-  router.push(route)
+const goToMap = (postId) => {
+  router.push(`/explore/details/${postId}`)
 }
 
 const goToBlog = (id) => {
@@ -129,9 +153,10 @@ const goToBlog = (id) => {
 }
 
 .feature-card {
-  height: 100%;
+  height: 80%;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin-bottom: 80px; 
 }
 
 .feature-card:hover {
