@@ -34,7 +34,7 @@ async def get_info():
 @app.post("/get_score")
 async def get_score(request: Request):
     data = await request.json()
-    ques = data.get("qusetion")
+    ques = data.get("question")
     answer = data.get("answer")
     dict = await service.get_score(ques, answer)
     score = dict["score"]

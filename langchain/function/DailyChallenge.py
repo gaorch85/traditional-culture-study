@@ -107,6 +107,8 @@ class challenge_generator:
 
     async def get_score(self, question, answer):
         """Get the score about the user input."""
+        print(question)
+        print(answer)
         judge = ""
         async for str in self.info.get_score(question, answer):
             judge += str
