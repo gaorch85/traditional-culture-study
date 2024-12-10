@@ -29,7 +29,7 @@
         <h2>热门讨论</h2>
         <el-row :gutter="20">
           <el-col :span="8" v-for="(topic, index) in allTopics" :key="index">
-            <el-card class="community-card" @click="goToBlog(index + 1)">
+            <el-card class="community-card" @click="goToBlog(topic.id)">
               <h3>{{ topic.title }}</h3>
               <p>{{ "用户：" + topic.username }}</p>
             </el-card>

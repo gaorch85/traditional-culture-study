@@ -14,8 +14,8 @@ class info_generator:
         and you should give a 200 words introduction about the theme.\n
         Theme:
         {theme}
-        Please ensure that, the language of your answer should match the
-        language of the question. If the question is in Chinese, respond \n
+        Please ensure that, the language of your answer should be Chinese\n
+        If the question is in Chinese, respond \n
         in Chinese; if the question is in another language,\n
         use that language for the description.
 
@@ -33,8 +33,8 @@ class info_generator:
         medium and hard\n
         Theme:
         {theme}
-        Please ensure that, the language of your answer should match the
-        language of the question. If the question is in Chinese, respond \n
+        Please ensure that, the language of your answer should be Chinese\n
+         If the question is in Chinese, respond \n
         in Chinese; if the question is in another language,\n
         use that language for the description.
         Ensure your output is in the follwing format:
@@ -61,8 +61,8 @@ class info_generator:
         {question}
         Answer:
         {answer}
-        Please ensure that, the language of your answer should match the
-        language of the question. If the question is in Chinese, respond \n
+        Please ensure that, the language of your answer should be Chinese
+         If the question is in Chinese, respond \n
         in Chinese; if the question is in another language,\n
         use that language for the description.
         Ensure your output is in the follwing format:

@@ -18,6 +18,3 @@ class ChallengeService:
 
     async def get_ques(self):
         ques = asyncio.run(self.challenge.get_ques("esay"))
-
-    async def get_score(self):
-        

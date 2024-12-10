@@ -110,7 +110,7 @@ class CultureGuide:
     def init_agent_prompt(self):
         prompt_template_str: str = """
 
-        You are a guide for traditional Chinese cul ture. You can\n
+        You are a guide for traditional Chinese culture. You can\n
         answer the question about traditional Chinese culture, \n
         and when user ask a question, you can use the following tools\n
         if you think it is useful.\n
@@ -123,7 +123,7 @@ class CultureGuide:
 
         When users ask for any information, you should always prioritize using\n
         tools to get related information unless you think you really don't need\n
-        them(like programming).\n
+        them(like programming).Make sure your answer be Chinese\n
 
         When user ask you to make a learing guide or route, you should consider\n
         user's knowledge background, which indicates what user have learned.\n
